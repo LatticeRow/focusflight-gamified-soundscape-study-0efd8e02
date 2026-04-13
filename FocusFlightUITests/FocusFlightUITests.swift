@@ -1,0 +1,34 @@
+import XCTest
+
+final class FocusFlightUITests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+    }
+
+    @MainActor
+    func testShellFlow() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("-uiTesting")
+        app.launch()
+
+        app.buttons["home.changeRoute"].tap()
+        app.buttons["route.sea-ord"].tap()
+        app.buttons["50m"].tap()
+        app.buttons["home.startFlight"].tap()
+
+        XCTAssertTrue(app.staticTexts["In Flight"].waitForExistence(timeout: 2))
+
+        app.buttons["session.pauseResume"].tap()
+        app.buttons["session.pauseResume"].tap()
+        app.buttons["session.end"].tap()
+
+        app.tabBars.buttons["Passport"].tap()
+        app.buttons["Milestones"].tap()
+
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["90m"].tap()
+        app.buttons["Night"].tap()
+        app.switches["settings.notifications"].tap()
+        app.switches["settings.haptics"].tap()
+    }
+}

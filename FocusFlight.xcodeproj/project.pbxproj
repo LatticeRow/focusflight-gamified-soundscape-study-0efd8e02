@@ -1,0 +1,855 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FF0000000000000000000001 /* FocusFlightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000101 /* FocusFlightApp.swift */; };
+		FF0000000000000000000002 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000102 /* AppEnvironment.swift */; };
+		FF0000000000000000000003 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000103 /* AppCoordinator.swift */; };
+		FF0000000000000000000004 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000201 /* HomeView.swift */; };
+		FF0000000000000000000005 /* RouteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000202 /* RouteCardView.swift */; };
+		FF0000000000000000000006 /* RoutePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000203 /* RoutePickerView.swift */; };
+		FF0000000000000000000007 /* RouteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000204 /* RouteRowView.swift */; };
+		FF0000000000000000000008 /* FlightSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000205 /* FlightSessionView.swift */; };
+		FF0000000000000000000009 /* PassportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000206 /* PassportView.swift */; };
+		FF000000000000000000000A /* PassportStampCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000207 /* PassportStampCard.swift */; };
+		FF000000000000000000000B /* AchievementBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000208 /* AchievementBadgeView.swift */; };
+		FF000000000000000000000C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000209 /* SettingsView.swift */; };
+		FF000000000000000000000D /* FlightRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000301 /* FlightRoute.swift */; };
+		FF000000000000000000000E /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000302 /* FocusSession.swift */; };
+		FF000000000000000000000F /* PassportStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000303 /* PassportStamp.swift */; };
+		FF0000000000000000000010 /* AchievementDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000304 /* AchievementDefinition.swift */; };
+		FF0000000000000000000011 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000305 /* UserPreferences.swift */; };
+		FF0000000000000000000012 /* SessionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000401 /* SessionEngine.swift */; };
+		FF0000000000000000000013 /* AchievementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000402 /* AchievementEngine.swift */; };
+		FF0000000000000000000014 /* AudioPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000403 /* AudioPlayerService.swift */; };
+		FF0000000000000000000015 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000404 /* NotificationService.swift */; };
+		FF0000000000000000000016 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000405 /* AppLifecycleCoordinator.swift */; };
+		FF0000000000000000000017 /* RouteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000501 /* RouteRepository.swift */; };
+		FF0000000000000000000018 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000502 /* SessionRepository.swift */; };
+		FF0000000000000000000019 /* SwiftDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000601 /* SwiftDataContainer.swift */; };
+		FF000000000000000000001A /* SeedDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000602 /* SeedDataLoader.swift */; };
+		FF000000000000000000001B /* FFColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000701 /* FFColors.swift */; };
+		FF000000000000000000001C /* FFTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000702 /* FFTypography.swift */; };
+		FF000000000000000000001D /* FFSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000703 /* FFSpacing.swift */; };
+		FF000000000000000000001E /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000801 /* PrimaryButton.swift */; };
+		FF000000000000000000001F /* MetricPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000802 /* MetricPill.swift */; };
+		FF0000000000000000000020 /* RouteHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000803 /* RouteHeader.swift */; };
+		FF0000000000000000000021 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000901 /* Assets.xcassets */; };
+		FF0000000000000000000023 /* routes.json in Resources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000603 /* routes.json */; };
+		FF0000000000000000000024 /* SessionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000B01 /* SessionEngineTests.swift */; };
+		FF0000000000000000000025 /* AchievementEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000B02 /* AchievementEngineTests.swift */; };
+		FF0000000000000000000026 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000B03 /* PersistenceTests.swift */; };
+		FF0000000000000000000027 /* FocusFlightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000C01 /* FocusFlightUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF0000000000000000001001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF0000000000000000003004 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF0000000000000000003001;
+			remoteInfo = FocusFlight;
+		};
+		FF0000000000000000001002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF0000000000000000003004 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF0000000000000000003001;
+			remoteInfo = FocusFlight;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FF0000000000000000000101 /* FocusFlightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFlightApp.swift; sourceTree = "<group>"; };
+		FF0000000000000000000102 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		FF0000000000000000000103 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		FF0000000000000000000201 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000202 /* RouteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCardView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000203 /* RoutePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePickerView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000204 /* RouteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRowView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000205 /* FlightSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightSessionView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000206 /* PassportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000207 /* PassportStampCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportStampCard.swift; sourceTree = "<group>"; };
+		FF0000000000000000000208 /* AchievementBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgeView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000209 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000301 /* FlightRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightRoute.swift; sourceTree = "<group>"; };
+		FF0000000000000000000302 /* FocusSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSession.swift; sourceTree = "<group>"; };
+		FF0000000000000000000303 /* PassportStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportStamp.swift; sourceTree = "<group>"; };
+		FF0000000000000000000304 /* AchievementDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementDefinition.swift; sourceTree = "<group>"; };
+		FF0000000000000000000305 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		FF0000000000000000000401 /* SessionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEngine.swift; sourceTree = "<group>"; };
+		FF0000000000000000000402 /* AchievementEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementEngine.swift; sourceTree = "<group>"; };
+		FF0000000000000000000403 /* AudioPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerService.swift; sourceTree = "<group>"; };
+		FF0000000000000000000404 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		FF0000000000000000000405 /* AppLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifecycleCoordinator.swift; sourceTree = "<group>"; };
+		FF0000000000000000000501 /* RouteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRepository.swift; sourceTree = "<group>"; };
+		FF0000000000000000000502 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
+		FF0000000000000000000601 /* SwiftDataContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataContainer.swift; sourceTree = "<group>"; };
+		FF0000000000000000000602 /* SeedDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataLoader.swift; sourceTree = "<group>"; };
+		FF0000000000000000000603 /* routes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = routes.json; sourceTree = "<group>"; };
+		FF0000000000000000000701 /* FFColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFColors.swift; sourceTree = "<group>"; };
+		FF0000000000000000000702 /* FFTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTypography.swift; sourceTree = "<group>"; };
+		FF0000000000000000000703 /* FFSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFSpacing.swift; sourceTree = "<group>"; };
+		FF0000000000000000000801 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		FF0000000000000000000802 /* MetricPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricPill.swift; sourceTree = "<group>"; };
+		FF0000000000000000000803 /* RouteHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteHeader.swift; sourceTree = "<group>"; };
+		FF0000000000000000000901 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FF0000000000000000000903 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF0000000000000000000B01 /* SessionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEngineTests.swift; sourceTree = "<group>"; };
+		FF0000000000000000000B02 /* AchievementEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementEngineTests.swift; sourceTree = "<group>"; };
+		FF0000000000000000000B03 /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
+		FF0000000000000000000B04 /* FocusFlightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusFlightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000C01 /* FocusFlightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFlightUITests.swift; sourceTree = "<group>"; };
+		FF0000000000000000000C02 /* FocusFlightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusFlightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000D01 /* FocusFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FF0000000000000000002001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FF0000000000000000002101 = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002102 /* FocusFlight */,
+				FF0000000000000000002103 /* FocusFlightTests */,
+				FF0000000000000000002104 /* FocusFlightUITests */,
+				FF0000000000000000002105 /* Scripts */,
+				FF0000000000000000002106 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002102 /* FocusFlight */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002201 /* App */,
+				FF0000000000000000002202 /* Features */,
+				FF0000000000000000002203 /* Domain */,
+				FF0000000000000000002204 /* Data */,
+				FF0000000000000000002205 /* UI */,
+				FF0000000000000000002206 /* Resources */,
+			);
+			path = FocusFlight;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002103 /* FocusFlightTests */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000B01 /* SessionEngineTests.swift */,
+				FF0000000000000000000B02 /* AchievementEngineTests.swift */,
+				FF0000000000000000000B03 /* PersistenceTests.swift */,
+			);
+			path = FocusFlightTests;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002104 /* FocusFlightUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000C01 /* FocusFlightUITests.swift */,
+			);
+			path = FocusFlightUITests;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002105 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002106 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000D01 /* FocusFlight.app */,
+				FF0000000000000000000B04 /* FocusFlightTests.xctest */,
+				FF0000000000000000000C02 /* FocusFlightUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002201 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000101 /* FocusFlightApp.swift */,
+				FF0000000000000000000102 /* AppEnvironment.swift */,
+				FF0000000000000000000103 /* AppCoordinator.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002202 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002211 /* Home */,
+				FF0000000000000000002212 /* Routes */,
+				FF0000000000000000002213 /* Session */,
+				FF0000000000000000002214 /* Passport */,
+				FF0000000000000000002215 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002203 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002221 /* Models */,
+				FF0000000000000000002222 /* Services */,
+				FF0000000000000000002223 /* Repositories */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002204 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002231 /* Seed */,
+				FF0000000000000000002232 /* Persistence */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002205 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000002241 /* DesignSystem */,
+				FF0000000000000000002242 /* Components */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002206 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000901 /* Assets.xcassets */,
+				FF0000000000000000000903 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002211 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000201 /* HomeView.swift */,
+				FF0000000000000000000202 /* RouteCardView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002212 /* Routes */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000203 /* RoutePickerView.swift */,
+				FF0000000000000000000204 /* RouteRowView.swift */,
+			);
+			path = Routes;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002213 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000205 /* FlightSessionView.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002214 /* Passport */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000206 /* PassportView.swift */,
+				FF0000000000000000000207 /* PassportStampCard.swift */,
+				FF0000000000000000000208 /* AchievementBadgeView.swift */,
+			);
+			path = Passport;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002215 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000209 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002221 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000301 /* FlightRoute.swift */,
+				FF0000000000000000000302 /* FocusSession.swift */,
+				FF0000000000000000000303 /* PassportStamp.swift */,
+				FF0000000000000000000304 /* AchievementDefinition.swift */,
+				FF0000000000000000000305 /* UserPreferences.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002222 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000401 /* SessionEngine.swift */,
+				FF0000000000000000000402 /* AchievementEngine.swift */,
+				FF0000000000000000000403 /* AudioPlayerService.swift */,
+				FF0000000000000000000404 /* NotificationService.swift */,
+				FF0000000000000000000405 /* AppLifecycleCoordinator.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002223 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000501 /* RouteRepository.swift */,
+				FF0000000000000000000502 /* SessionRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002231 /* Seed */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000603 /* routes.json */,
+			);
+			path = Seed;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002232 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000601 /* SwiftDataContainer.swift */,
+				FF0000000000000000000602 /* SeedDataLoader.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002241 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000701 /* FFColors.swift */,
+				FF0000000000000000000702 /* FFTypography.swift */,
+				FF0000000000000000000703 /* FFSpacing.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		FF0000000000000000002242 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF0000000000000000000801 /* PrimaryButton.swift */,
+				FF0000000000000000000802 /* MetricPill.swift */,
+				FF0000000000000000000803 /* RouteHeader.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF0000000000000000003001 /* FocusFlight */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "FocusFlight" */;
+			buildPhases = (
+				FF0000000000000000002004 /* Sources */,
+				FF0000000000000000002001 /* Frameworks */,
+				FF0000000000000000002005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FocusFlight;
+			productName = FocusFlight;
+			productReference = FF0000000000000000000D01 /* FocusFlight.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FF0000000000000000003002 /* FocusFlightTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "FocusFlightTests" */;
+			buildPhases = (
+				FF0000000000000000002006 /* Sources */,
+				FF0000000000000000002002 /* Frameworks */,
+				FF0000000000000000002007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF0000000000000000006001 /* PBXTargetDependency */,
+			);
+			name = FocusFlightTests;
+			productName = FocusFlightTests;
+			productReference = FF0000000000000000000B04 /* FocusFlightTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FF0000000000000000003003 /* FocusFlightUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "FocusFlightUITests" */;
+			buildPhases = (
+				FF0000000000000000002008 /* Sources */,
+				FF0000000000000000002003 /* Frameworks */,
+				FF0000000000000000002009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF0000000000000000006002 /* PBXTargetDependency */,
+			);
+			name = FocusFlightUITests;
+			productName = FocusFlightUITests;
+			productReference = FF0000000000000000000C02 /* FocusFlightUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF0000000000000000003004 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					FF0000000000000000003001 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+					FF0000000000000000003002 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = FF0000000000000000003001;
+					};
+					FF0000000000000000003003 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = FF0000000000000000003001;
+					};
+				};
+			};
+			buildConfigurationList = FF0000000000000000005001 /* Build configuration list for PBXProject "FocusFlight" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FF0000000000000000002101;
+			productRefGroup = FF0000000000000000002106 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF0000000000000000003001 /* FocusFlight */,
+				FF0000000000000000003002 /* FocusFlightTests */,
+				FF0000000000000000003003 /* FocusFlightUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FF0000000000000000002005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF0000000000000000000021 /* Assets.xcassets in Resources */,
+				FF0000000000000000000023 /* routes.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF0000000000000000002004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF0000000000000000000001 /* FocusFlightApp.swift in Sources */,
+				FF0000000000000000000002 /* AppEnvironment.swift in Sources */,
+				FF0000000000000000000003 /* AppCoordinator.swift in Sources */,
+				FF0000000000000000000004 /* HomeView.swift in Sources */,
+				FF0000000000000000000005 /* RouteCardView.swift in Sources */,
+				FF0000000000000000000006 /* RoutePickerView.swift in Sources */,
+				FF0000000000000000000007 /* RouteRowView.swift in Sources */,
+				FF0000000000000000000008 /* FlightSessionView.swift in Sources */,
+				FF0000000000000000000009 /* PassportView.swift in Sources */,
+				FF000000000000000000000A /* PassportStampCard.swift in Sources */,
+				FF000000000000000000000B /* AchievementBadgeView.swift in Sources */,
+				FF000000000000000000000C /* SettingsView.swift in Sources */,
+				FF000000000000000000000D /* FlightRoute.swift in Sources */,
+				FF000000000000000000000E /* FocusSession.swift in Sources */,
+				FF000000000000000000000F /* PassportStamp.swift in Sources */,
+				FF0000000000000000000010 /* AchievementDefinition.swift in Sources */,
+				FF0000000000000000000011 /* UserPreferences.swift in Sources */,
+				FF0000000000000000000012 /* SessionEngine.swift in Sources */,
+				FF0000000000000000000013 /* AchievementEngine.swift in Sources */,
+				FF0000000000000000000014 /* AudioPlayerService.swift in Sources */,
+				FF0000000000000000000015 /* NotificationService.swift in Sources */,
+				FF0000000000000000000016 /* AppLifecycleCoordinator.swift in Sources */,
+				FF0000000000000000000017 /* RouteRepository.swift in Sources */,
+				FF0000000000000000000018 /* SessionRepository.swift in Sources */,
+				FF0000000000000000000019 /* SwiftDataContainer.swift in Sources */,
+				FF000000000000000000001A /* SeedDataLoader.swift in Sources */,
+				FF000000000000000000001B /* FFColors.swift in Sources */,
+				FF000000000000000000001C /* FFTypography.swift in Sources */,
+				FF000000000000000000001D /* FFSpacing.swift in Sources */,
+				FF000000000000000000001E /* PrimaryButton.swift in Sources */,
+				FF000000000000000000001F /* MetricPill.swift in Sources */,
+				FF0000000000000000000020 /* RouteHeader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF0000000000000000000024 /* SessionEngineTests.swift in Sources */,
+				FF0000000000000000000025 /* AchievementEngineTests.swift in Sources */,
+				FF0000000000000000000026 /* PersistenceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0000000000000000002008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF0000000000000000000027 /* FocusFlightUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF0000000000000000006001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF0000000000000000003001 /* FocusFlight */;
+			targetProxy = FF0000000000000000001001 /* PBXContainerItemProxy */;
+		};
+		FF0000000000000000006002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF0000000000000000003001 /* FocusFlight */;
+			targetProxy = FF0000000000000000001002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FF0000000000000000004001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FF0000000000000000004002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FF0000000000000000004101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FocusFlight/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FF0000000000000000004102 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FocusFlight/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FF0000000000000000004201 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusFlight.app/FocusFlight";
+				TEST_TARGET_NAME = FocusFlight;
+			};
+			name = Debug;
+		};
+		FF0000000000000000004202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusFlight.app/FocusFlight";
+				TEST_TARGET_NAME = FocusFlight;
+			};
+			name = Release;
+		};
+		FF0000000000000000004301 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = FocusFlight;
+			};
+			name = Debug;
+		};
+		FF0000000000000000004302 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = FocusFlight;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FF0000000000000000005001 /* Build configuration list for PBXProject "FocusFlight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF0000000000000000004001 /* Debug */,
+				FF0000000000000000004002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "FocusFlight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF0000000000000000004101 /* Debug */,
+				FF0000000000000000004102 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "FocusFlightTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF0000000000000000004201 /* Debug */,
+				FF0000000000000000004202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "FocusFlightUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF0000000000000000004301 /* Debug */,
+				FF0000000000000000004302 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FF0000000000000000003004 /* Project object */;
+}

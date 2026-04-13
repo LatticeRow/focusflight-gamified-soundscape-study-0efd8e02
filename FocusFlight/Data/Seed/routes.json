@@ -1,0 +1,90 @@
+[
+  {
+    "id": "sfo-jfk",
+    "originCity": "San Francisco",
+    "originCode": "SFO",
+    "destinationCity": "New York",
+    "destinationCode": "JFK",
+    "distanceKm": 4162,
+    "estimatedMinutes": 50,
+    "themeName": "Coastal Red-Eye",
+    "audioTrackID": "steady"
+  },
+  {
+    "id": "lax-hnl",
+    "originCity": "Los Angeles",
+    "originCode": "LAX",
+    "destinationCity": "Honolulu",
+    "destinationCode": "HNL",
+    "distanceKm": 4108,
+    "estimatedMinutes": 90,
+    "themeName": "Pacific Night",
+    "audioTrackID": "night"
+  },
+  {
+    "id": "sea-ord",
+    "originCity": "Seattle",
+    "originCode": "SEA",
+    "destinationCity": "Chicago",
+    "destinationCode": "ORD",
+    "distanceKm": 2780,
+    "estimatedMinutes": 50,
+    "themeName": "Cloudline",
+    "audioTrackID": "rain"
+  },
+  {
+    "id": "bos-mia",
+    "originCity": "Boston",
+    "originCode": "BOS",
+    "destinationCity": "Miami",
+    "destinationCode": "MIA",
+    "distanceKm": 2028,
+    "estimatedMinutes": 50,
+    "themeName": "Sun Corridor",
+    "audioTrackID": "steady"
+  },
+  {
+    "id": "aus-den",
+    "originCity": "Austin",
+    "originCode": "AUS",
+    "destinationCity": "Denver",
+    "destinationCode": "DEN",
+    "distanceKm": 1246,
+    "estimatedMinutes": 25,
+    "themeName": "Mesa Lift",
+    "audioTrackID": "steady"
+  },
+  {
+    "id": "phx-slc",
+    "originCity": "Phoenix",
+    "originCode": "PHX",
+    "destinationCity": "Salt Lake City",
+    "destinationCode": "SLC",
+    "distanceKm": 817,
+    "estimatedMinutes": 25,
+    "themeName": "Desert Air",
+    "audioTrackID": "night"
+  },
+  {
+    "id": "san-pdx",
+    "originCity": "San Diego",
+    "originCode": "SAN",
+    "destinationCity": "Portland",
+    "destinationCode": "PDX",
+    "distanceKm": 1513,
+    "estimatedMinutes": 25,
+    "themeName": "West Coast Hop",
+    "audioTrackID": "rain"
+  },
+  {
+    "id": "iad-bna",
+    "originCity": "Washington",
+    "originCode": "IAD",
+    "destinationCity": "Nashville",
+    "destinationCode": "BNA",
+    "distanceKm": 870,
+    "estimatedMinutes": 25,
+    "themeName": "Bluegrass Glide",
+    "audioTrackID": "steady"
+  }
+]
