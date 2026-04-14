@@ -31,6 +31,7 @@ struct FlightSessionView: View {
                             .font(.system(size: 64, weight: .bold, design: .rounded))
                             .foregroundStyle(FFColors.textPrimary)
                             .monospacedDigit()
+                            .accessibilityIdentifier("session.remainingTime")
 
                         ProgressView(value: snapshot.progress)
                             .tint(FFColors.accent)
@@ -137,10 +138,7 @@ struct FlightSessionView: View {
             hasLoaded = true
             refresh(at: .now)
             audioPlayerService.synchronizePlayback(for: session)
-            if preferences.notificationsEnabled, session.status == .active {
-                notificationService.requestAuthorizationIfNeeded()
-                notificationService.scheduleCompletionNotification(for: session, route: route)
-            }
+            synchronizeNotification(promptIfNeeded: false)
         }
         .onReceive(sessionTimer) { value in
             guard session.status == .active else { return }
@@ -170,13 +168,9 @@ struct FlightSessionView: View {
 
     private func refresh(at date: Date) {
         now = date
-        let previousStatus = session.status
-        _ = sessionEngine.restore(session, routeDistanceKm: route.distanceKm, now: date)
-
-        if previousStatus != .completed, session.status == .completed {
+        if sessionEngine.shouldComplete(session, now: date) {
+            _ = sessionEngine.complete(session, at: date, routeDistanceKm: route.distanceKm)
             finalizeCompletion()
-        } else {
-            persistChanges()
         }
     }
 
@@ -186,15 +180,12 @@ struct FlightSessionView: View {
 
         if isPaused {
             _ = sessionEngine.resume(session, at: eventDate, routeDistanceKm: route.distanceKm)
-            if preferences.notificationsEnabled {
-                notificationService.scheduleCompletionNotification(for: session, route: route)
-            }
         } else {
             _ = sessionEngine.pause(session, at: eventDate, routeDistanceKm: route.distanceKm)
-            notificationService.cancelNotification(for: session.id)
         }
 
         audioPlayerService.synchronizePlayback(for: session)
+        synchronizeNotification(promptIfNeeded: false)
         persistChanges()
     }
 
@@ -240,6 +231,17 @@ struct FlightSessionView: View {
             try sessionRepository.saveChanges(in: modelContext)
         } catch {
             assertionFailure("Failed to save session state: \(error)")
+        }
+    }
+
+    private func synchronizeNotification(promptIfNeeded: Bool) {
+        Task {
+            _ = await notificationService.synchronizeCompletionNotification(
+                for: session,
+                route: route,
+                notificationsEnabled: preferences.notificationsEnabled,
+                promptIfNeeded: promptIfNeeded
+            )
         }
     }
 

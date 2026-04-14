@@ -19,6 +19,8 @@ final class AppEnvironment {
     private var cancellables = Set<AnyCancellable>()
 
     init() {
+        let arguments = ProcessInfo.processInfo.arguments
+        let isUITesting = arguments.contains("-uiTesting") || arguments.contains("-uiTestingInMemory")
         let preferences = UserPreferences()
         self.preferences = preferences
         self.routeRepository = RouteRepository()
@@ -26,7 +28,7 @@ final class AppEnvironment {
         self.sessionEngine = SessionEngine()
         self.achievementEngine = AchievementEngine()
         self.audioPlayerService = AudioPlayerService(initialVolume: preferences.audioVolume)
-        self.notificationService = NotificationService()
+        self.notificationService = NotificationService(allowsAuthorizationPrompt: !isUITesting)
         self.lifecycleCoordinator = AppLifecycleCoordinator(audioPlayerService: audioPlayerService)
         self.router = AppRouter(initialRouteID: routeRepository.routes.first?.id)
 

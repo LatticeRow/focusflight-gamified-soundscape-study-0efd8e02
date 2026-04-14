@@ -50,12 +50,12 @@ struct SettingsView: View {
 
                 settingsCard(title: "Options") {
                     VStack(spacing: FFSpacing.md) {
-                        Toggle("Notifications", isOn: $preferences.notificationsEnabled)
+                        Toggle("Landing Reminder", isOn: $preferences.notificationsEnabled)
                             .tint(FFColors.accent)
                             .foregroundStyle(FFColors.textPrimary)
                             .accessibilityIdentifier("settings.notifications")
 
-                        Toggle("Haptics", isOn: $preferences.hapticsEnabled)
+                        Toggle("Vibration", isOn: $preferences.hapticsEnabled)
                             .tint(FFColors.accent)
                             .foregroundStyle(FFColors.textPrimary)
                             .accessibilityIdentifier("settings.haptics")
@@ -63,7 +63,7 @@ struct SettingsView: View {
                 }
 
                 settingsCard(title: "About") {
-                    Text("\(AppBrand.name) turns a focus block into a quiet flight.")
+                    Text("Quiet cabin sound for focused work.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }

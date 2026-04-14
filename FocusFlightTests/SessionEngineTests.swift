@@ -1,4 +1,5 @@
 import XCTest
+import UserNotifications
 @testable import Aureline
 
 final class SessionEngineTests: XCTestCase {
@@ -113,6 +114,119 @@ final class SessionEngineTests: XCTestCase {
         XCTAssertEqual(session.elapsedFocusSeconds, 1_500)
         XCTAssertEqual(session.traveledDistanceKm, route.distanceKm)
         XCTAssertEqual(session.remainingDistanceKm, 0)
-        XCTAssertNotNil(session.completedAt)
+        XCTAssertEqual(session.completedAt, session.expectedEndAt)
+    }
+}
+
+@MainActor
+final class NotificationServiceTests: XCTestCase {
+    func testSynchronizeCompletionNotificationRequestsPermissionFromExplicitUserAction() async {
+        let center = FakeNotificationCenterClient(status: .notDetermined, requestAuthorizationResult: true)
+        let service = NotificationService(notificationCenter: center)
+        let startDate = Date()
+        let session = FocusSession(
+            routeID: FlightRoute.placeholder.id,
+            routeThemeName: FlightRoute.placeholder.themeName,
+            originCode: FlightRoute.placeholder.originCode,
+            destinationCode: FlightRoute.placeholder.destinationCode,
+            startedAt: startDate,
+            expectedEndAt: startDate.addingTimeInterval(90),
+            plannedMinutes: 25,
+            status: .active,
+            selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
+            remainingDistanceKm: FlightRoute.placeholder.distanceKm
+        )
+
+        let didSchedule = await service.synchronizeCompletionNotification(
+            for: session,
+            route: .placeholder,
+            notificationsEnabled: true,
+            promptIfNeeded: true
+        )
+
+        XCTAssertTrue(didSchedule)
+        XCTAssertEqual(center.requestAuthorizationCount, 1)
+        XCTAssertEqual(center.addedRequests.count, 1)
+        XCTAssertEqual(service.authorizationStatus, .authorized)
+
+        let trigger = center.addedRequests.first?.trigger as? UNTimeIntervalNotificationTrigger
+        XCTAssertNotNil(trigger)
+        XCTAssertEqual(trigger?.timeInterval ?? 0, 90, accuracy: 1.5)
+    }
+
+    func testSynchronizeCompletionNotificationCancelsForPausedOrDisabledSessions() async {
+        let center = FakeNotificationCenterClient(status: .authorized, requestAuthorizationResult: true)
+        let service = NotificationService(notificationCenter: center)
+        let startDate = Date(timeIntervalSince1970: 1_000)
+        let session = SessionEngine().startSession(
+            route: .placeholder,
+            plannedMinutes: 25,
+            selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
+            startedAt: startDate
+        )
+
+        _ = await service.synchronizeCompletionNotification(
+            for: session,
+            route: .placeholder,
+            notificationsEnabled: false
+        )
+
+        XCTAssertTrue(center.addedRequests.isEmpty)
+        XCTAssertEqual(center.removedPendingIdentifiers.count, 1)
+
+        center.reset()
+        _ = SessionEngine().pause(session, at: startDate.addingTimeInterval(60), routeDistanceKm: FlightRoute.placeholder.distanceKm)
+
+        _ = await service.synchronizeCompletionNotification(
+            for: session,
+            route: .placeholder,
+            notificationsEnabled: true
+        )
+
+        XCTAssertTrue(center.addedRequests.isEmpty)
+        XCTAssertEqual(center.removedPendingIdentifiers.count, 1)
+    }
+}
+
+@MainActor
+private final class FakeNotificationCenterClient: NotificationCenterClient {
+    private(set) var status: UNAuthorizationStatus
+    private let requestAuthorizationResult: Bool
+    private(set) var requestAuthorizationCount = 0
+    private(set) var addedRequests: [UNNotificationRequest] = []
+    private(set) var removedPendingIdentifiers: [[String]] = []
+    private(set) var removedDeliveredIdentifiers: [[String]] = []
+
+    init(status: UNAuthorizationStatus, requestAuthorizationResult: Bool) {
+        self.status = status
+        self.requestAuthorizationResult = requestAuthorizationResult
+    }
+
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        status
+    }
+
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+        requestAuthorizationCount += 1
+        status = requestAuthorizationResult ? .authorized : .denied
+        return requestAuthorizationResult
+    }
+
+    func addRequest(_ request: UNNotificationRequest) async throws {
+        addedRequests.append(request)
+    }
+
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+        removedPendingIdentifiers.append(identifiers)
+    }
+
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        removedDeliveredIdentifiers.append(identifiers)
+    }
+
+    func reset() {
+        addedRequests.removeAll()
+        removedPendingIdentifiers.removeAll()
+        removedDeliveredIdentifiers.removeAll()
     }
 }

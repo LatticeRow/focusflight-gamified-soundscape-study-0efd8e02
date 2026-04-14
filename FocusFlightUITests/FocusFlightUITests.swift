@@ -8,7 +8,7 @@ final class AurelineUITests: XCTestCase {
     @MainActor
     func testShellFlow() throws {
         let app = XCUIApplication()
-        app.launchArguments.append("-uiTesting")
+        app.launchArguments.append("-uiTestingInMemory")
         app.launch()
 
         app.buttons["home.changeRoute"].tap()
@@ -35,5 +35,23 @@ final class AurelineUITests: XCTestCase {
         app.sliders["settings.volume"].adjust(toNormalizedSliderPosition: 0.65)
         app.switches["settings.notifications"].tap()
         app.switches["settings.haptics"].tap()
+    }
+
+    @MainActor
+    func testActiveSessionRestoresAfterRelaunch() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("-uiTesting")
+        app.launchEnvironment["AURELINE_STORE_NAME"] = "UITestRestore-\(UUID().uuidString)"
+        app.launch()
+
+        app.buttons["home.startFlight"].tap()
+        XCTAssertTrue(app.staticTexts["session.remainingTime"].waitForExistence(timeout: 2))
+
+        app.terminate()
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["session.remainingTime"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["session.pauseResume"].exists)
+        app.buttons["session.end"].tap()
     }
 }

@@ -140,7 +140,7 @@ struct SessionEngine {
     }
 
     func complete(_ session: FocusSession, at now: Date = .now, routeDistanceKm: Int) -> SessionSnapshot {
-        let completionDate = max(now, session.expectedEndAt)
+        let completionDate = now >= session.expectedEndAt ? session.expectedEndAt : now
         let snapshot = snapshot(for: session, routeDistanceKm: routeDistanceKm, now: completionDate)
 
         session.completedAt = completionDate

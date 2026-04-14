@@ -3,14 +3,17 @@ import SwiftData
 
 enum SwiftDataContainer {
     @MainActor
-    static func makeDefaultContainer(inMemory: Bool = false) -> ModelContainer {
+    static func makeDefaultContainer(
+        inMemory: Bool = false,
+        storeName: String = "AurelineStore"
+    ) -> ModelContainer {
         let schema = Schema([
             FocusSession.self,
             PassportStamp.self,
         ])
 
         let configuration = ModelConfiguration(
-            "AurelineStore",
+            storeName,
             isStoredInMemoryOnly: inMemory
         )
 

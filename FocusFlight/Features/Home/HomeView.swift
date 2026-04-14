@@ -118,7 +118,7 @@ struct HomeView: View {
                 .background(FFColors.panel)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             } else {
-                Text("Completed sessions appear here.")
+                Text("Finished flights appear here.")
                     .font(FFTypography.body)
                     .foregroundStyle(FFColors.textSecondary)
                     .padding(FFSpacing.md)

@@ -84,10 +84,17 @@ struct AppCoordinator: View {
             }
         }
         .task {
+            _ = await appEnvironment.notificationService.refreshAuthorizationStatus()
             synchronizeApplicationState(for: scenePhase)
         }
         .onChange(of: scenePhase) { _, phase in
             synchronizeApplicationState(for: phase)
+        }
+        .onChange(of: sessions.map(\.id)) { _, _ in
+            synchronizeApplicationState(for: scenePhase)
+        }
+        .onChange(of: preferences.notificationsEnabled) { _, isEnabled in
+            handleNotificationPreferenceChange(isEnabled)
         }
     }
 
@@ -105,11 +112,8 @@ struct AppCoordinator: View {
 
         do {
             try appEnvironment.sessionRepository.insert(session, in: modelContext)
-            if preferences.notificationsEnabled {
-                appEnvironment.notificationService.requestAuthorizationIfNeeded()
-                appEnvironment.notificationService.scheduleCompletionNotification(for: session, route: selectedRoute)
-            }
             router.activeSession = session
+            synchronizeNotification(for: session, route: selectedRoute, promptIfNeeded: true)
         } catch {
             assertionFailure("Failed to start session: \(error)")
         }
@@ -131,6 +135,7 @@ struct AppCoordinator: View {
     private func synchronizeActiveSession() -> FocusSession? {
         guard let session = sessions.first(where: \.isActiveLike) else {
             router.activeSession = nil
+            synchronizeNotification(for: nil, route: nil)
             return nil
         }
 
@@ -149,11 +154,40 @@ struct AppCoordinator: View {
             } else {
                 router.activeSession = session
                 appEnvironment.audioPlayerService.synchronizePlayback(for: session)
+                synchronizeNotification(for: session, route: route)
                 return session
             }
         } catch {
             assertionFailure("Failed to restore session: \(error)")
             return session
+        }
+    }
+
+    private func handleNotificationPreferenceChange(_ isEnabled: Bool) {
+        let session = sessions.first(where: \.isActiveLike)
+
+        if isEnabled, session == nil {
+            Task {
+                _ = await appEnvironment.notificationService.requestAuthorizationIfNeeded()
+            }
+            return
+        }
+
+        synchronizeNotification(for: session, route: session.map { route(for: $0) }, promptIfNeeded: isEnabled)
+    }
+
+    private func synchronizeNotification(
+        for session: FocusSession?,
+        route: FlightRoute?,
+        promptIfNeeded: Bool = false
+    ) {
+        Task {
+            _ = await appEnvironment.notificationService.synchronizeCompletionNotification(
+                for: session,
+                route: route,
+                notificationsEnabled: preferences.notificationsEnabled,
+                promptIfNeeded: promptIfNeeded
+            )
         }
     }
 
