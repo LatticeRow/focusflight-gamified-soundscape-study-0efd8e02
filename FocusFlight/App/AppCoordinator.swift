@@ -85,6 +85,7 @@ struct AppCoordinator: View {
             }
         }
         .task {
+            seedUITestPassportDataIfNeeded()
             _ = await appEnvironment.notificationService.refreshAuthorizationStatus()
             synchronizeApplicationState(for: scenePhase)
         }
@@ -194,5 +195,61 @@ struct AppCoordinator: View {
 
     private func route(for session: FocusSession) -> FlightRoute {
         appEnvironment.routeRepository.route(id: session.routeID) ?? .placeholder
+    }
+
+    private func seedUITestPassportDataIfNeeded() {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("-uiTestingSeedPassport") else { return }
+
+        let existingSessions = (try? modelContext.fetch(FetchDescriptor<FocusSession>())) ?? []
+        let existingStamps = (try? modelContext.fetch(FetchDescriptor<PassportStamp>())) ?? []
+        guard existingSessions.isEmpty, existingStamps.isEmpty else { return }
+
+        let baseDate = Calendar.current.date(
+            from: DateComponents(year: 2026, month: 4, day: 13, hour: 21, minute: 30)
+        ) ?? .now
+        let routes = Array(appEnvironment.routeRepository.routes.prefix(5))
+        let durations = [25, 50, 90, 50, 100]
+
+        for (index, route) in routes.enumerated() {
+            let completedAt = baseDate.addingTimeInterval(TimeInterval(index * 7_200))
+            let startedAt = completedAt.addingTimeInterval(TimeInterval(-durations[index] * 60))
+
+            let session = FocusSession(
+                routeID: route.id,
+                routeThemeName: route.themeName,
+                originCode: route.originCode,
+                destinationCode: route.destinationCode,
+                createdAt: startedAt,
+                startedAt: startedAt,
+                expectedEndAt: completedAt,
+                completedAt: completedAt,
+                plannedMinutes: durations[index],
+                status: .completed,
+                selectedAudioTrackID: route.audioTrackID,
+                completionPercent: 1,
+                elapsedFocusSeconds: durations[index] * 60,
+                traveledDistanceKm: route.distanceKm,
+                remainingDistanceKm: 0
+            )
+
+            modelContext.insert(session)
+        }
+
+        do {
+            try appEnvironment.sessionRepository.saveChanges(in: modelContext)
+
+            let seededSessions = try modelContext.fetch(
+                FetchDescriptor<FocusSession>(
+                    sortBy: [SortDescriptor(\.startedAt, order: .forward)]
+                )
+            )
+
+            for session in seededSessions where session.status == .completed {
+                _ = try appEnvironment.sessionRepository.stamp(for: session, in: modelContext)
+            }
+        } catch {
+            assertionFailure("Failed to seed passport UI test data: \(error)")
+        }
     }
 }
