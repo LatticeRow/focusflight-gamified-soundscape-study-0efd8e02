@@ -16,6 +16,7 @@ final class AppEnvironment {
     let audioPlayerService: AudioPlayerService
     let notificationService: NotificationService
     let lifecycleCoordinator: AppLifecycleCoordinator
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         let preferences = UserPreferences()
@@ -24,10 +25,17 @@ final class AppEnvironment {
         self.sessionRepository = SessionRepository()
         self.sessionEngine = SessionEngine()
         self.achievementEngine = AchievementEngine()
-        self.audioPlayerService = AudioPlayerService()
+        self.audioPlayerService = AudioPlayerService(initialVolume: preferences.audioVolume)
         self.notificationService = NotificationService()
-        self.lifecycleCoordinator = AppLifecycleCoordinator()
+        self.lifecycleCoordinator = AppLifecycleCoordinator(audioPlayerService: audioPlayerService)
         self.router = AppRouter(initialRouteID: routeRepository.routes.first?.id)
+
+        preferences.$audioVolume
+            .removeDuplicates()
+            .sink { [audioPlayerService] volume in
+                audioPlayerService.setVolume(volume)
+            }
+            .store(in: &cancellables)
     }
 }
 

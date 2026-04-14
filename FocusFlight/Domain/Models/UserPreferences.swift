@@ -29,7 +29,7 @@ final class UserPreferences: ObservableObject {
         }
 
         var bundledFileName: String {
-            "\(assetName).m4a"
+            "\(assetName).wav"
         }
 
         var detail: String {
@@ -46,6 +46,7 @@ final class UserPreferences: ObservableObject {
     private enum Keys {
         static let defaultDuration = "default_duration_minutes"
         static let audioTrack = "default_audio_track"
+        static let audioVolume = "audio_volume"
         static let notificationsEnabled = "notifications_enabled"
         static let hapticsEnabled = "haptics_enabled"
     }
@@ -74,6 +75,17 @@ final class UserPreferences: ObservableObject {
         }
     }
 
+    @Published var audioVolume: Double {
+        didSet {
+            let normalized = min(max(audioVolume, 0), 1)
+            if normalized != audioVolume {
+                audioVolume = normalized
+                return
+            }
+            defaults.set(normalized, forKey: Keys.audioVolume)
+        }
+    }
+
     @Published var notificationsEnabled: Bool {
         didSet { defaults.set(notificationsEnabled, forKey: Keys.notificationsEnabled) }
     }
@@ -91,6 +103,7 @@ final class UserPreferences: ObservableObject {
         let persistedDuration = defaults.object(forKey: Keys.defaultDuration) as? Int ?? 25
         self.defaultDurationMinutes = Self.durationPresets.contains(persistedDuration) ? persistedDuration : 25
         self.defaultAudioTrackID = AudioTrack(rawValue: defaults.string(forKey: Keys.audioTrack) ?? "")?.id ?? AudioTrack.fallback.id
+        self.audioVolume = min(max(defaults.object(forKey: Keys.audioVolume) as? Double ?? 0.72, 0), 1)
         self.notificationsEnabled = defaults.object(forKey: Keys.notificationsEnabled) as? Bool ?? true
         self.hapticsEnabled = defaults.object(forKey: Keys.hapticsEnabled) as? Bool ?? true
     }

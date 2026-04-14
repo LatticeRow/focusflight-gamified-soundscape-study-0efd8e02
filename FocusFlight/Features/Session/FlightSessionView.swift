@@ -9,7 +9,7 @@ struct FlightSessionView: View {
     @ObservedObject var preferences: UserPreferences
     let sessionEngine: SessionEngine
     let sessionRepository: SessionRepository
-    let audioPlayerService: AudioPlayerService
+    @ObservedObject var audioPlayerService: AudioPlayerService
     let notificationService: NotificationService
     let onClose: () -> Void
 
@@ -46,9 +46,58 @@ struct FlightSessionView: View {
                     .background(FFColors.panel)
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
-                    Text(selectedTrack.title)
-                        .font(FFTypography.body)
-                        .foregroundStyle(FFColors.textSecondary)
+                    VStack(alignment: .leading, spacing: FFSpacing.md) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Cabin Sound")
+                                    .font(FFTypography.sectionTitle)
+                                    .foregroundStyle(FFColors.textPrimary)
+
+                                Text(selectedTrack.title)
+                                    .font(FFTypography.body)
+                                    .foregroundStyle(FFColors.textSecondary)
+                            }
+
+                            Spacer()
+
+                            Button(audioPlayerService.isPlaybackEnabled ? "Pause Sound" : "Play Sound") {
+                                toggleAudio()
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(FFColors.accentSoft)
+                            .disabled(isTerminal)
+                            .accessibilityIdentifier("session.soundToggle")
+                        }
+
+                        VStack(alignment: .leading, spacing: FFSpacing.sm) {
+                            HStack {
+                                Text("Level")
+                                    .font(FFTypography.detail)
+                                    .foregroundStyle(FFColors.textSecondary)
+                                Spacer()
+                                Text("\(Int(preferences.audioVolume * 100))%")
+                                    .font(FFTypography.detail)
+                                    .foregroundStyle(FFColors.textSecondary)
+                            }
+
+                            Slider(value: $preferences.audioVolume, in: 0...1)
+                                .tint(FFColors.accent)
+                                .accessibilityIdentifier("session.volume")
+                        }
+
+                        if isPaused {
+                            Text("Sound resumes with the timer.")
+                                .font(FFTypography.detail)
+                                .foregroundStyle(FFColors.textSecondary)
+                        } else if let error = audioPlayerService.lastErrorDescription {
+                            Text(error)
+                                .font(FFTypography.detail)
+                                .foregroundStyle(.red.opacity(0.85))
+                        }
+                    }
+                    .padding(FFSpacing.lg)
+                    .background(FFColors.panel)
+                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
                     HStack(spacing: FFSpacing.md) {
                         if !isTerminal {
@@ -87,7 +136,7 @@ struct FlightSessionView: View {
             guard !hasLoaded else { return }
             hasLoaded = true
             refresh(at: .now)
-            audioPlayerService.preload(trackID: session.selectedAudioTrackID)
+            audioPlayerService.synchronizePlayback(for: session)
             if preferences.notificationsEnabled, session.status == .active {
                 notificationService.requestAuthorizationIfNeeded()
                 notificationService.scheduleCompletionNotification(for: session, route: route)
@@ -145,11 +194,18 @@ struct FlightSessionView: View {
             notificationService.cancelNotification(for: session.id)
         }
 
+        audioPlayerService.synchronizePlayback(for: session)
         persistChanges()
+    }
+
+    private func toggleAudio() {
+        audioPlayerService.togglePlaybackIntent(trackID: session.selectedAudioTrackID)
+        audioPlayerService.synchronizePlayback(for: session)
     }
 
     private func finalizeCompletion() {
         notificationService.cancelNotification(for: session.id)
+        audioPlayerService.synchronizePlayback(for: session)
 
         do {
             try sessionRepository.saveChanges(in: modelContext)
@@ -174,6 +230,7 @@ struct FlightSessionView: View {
 
         _ = sessionEngine.cancel(session, at: .now, routeDistanceKm: route.distanceKm)
         notificationService.cancelNotification(for: session.id)
+        audioPlayerService.synchronizePlayback(for: session)
         persistChanges()
         onClose()
     }

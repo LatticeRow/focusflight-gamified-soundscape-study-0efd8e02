@@ -84,13 +84,10 @@ struct AppCoordinator: View {
             }
         }
         .task {
-            synchronizeActiveSession()
+            synchronizeApplicationState(for: scenePhase)
         }
         .onChange(of: scenePhase) { _, phase in
-            appEnvironment.lifecycleCoordinator.handle(phase: phase)
-            if phase == .active {
-                synchronizeActiveSession()
-            }
+            synchronizeApplicationState(for: phase)
         }
     }
 
@@ -118,10 +115,23 @@ struct AppCoordinator: View {
         }
     }
 
-    private func synchronizeActiveSession() {
+    private func synchronizeApplicationState(for phase: ScenePhase) {
+        let activeSession = phase == .active
+            ? synchronizeActiveSession()
+            : sessions.first(where: \.isActiveLike)
+
+        if phase != .active {
+            router.activeSession = activeSession
+        }
+
+        appEnvironment.lifecycleCoordinator.handle(phase: phase, activeSession: activeSession)
+    }
+
+    @discardableResult
+    private func synchronizeActiveSession() -> FocusSession? {
         guard let session = sessions.first(where: \.isActiveLike) else {
             router.activeSession = nil
-            return
+            return nil
         }
 
         let route = route(for: session)
@@ -134,11 +144,16 @@ struct AppCoordinator: View {
                 _ = try appEnvironment.sessionRepository.stamp(for: session, in: modelContext)
                 appEnvironment.notificationService.cancelNotification(for: session.id)
                 router.activeSession = nil
+                appEnvironment.audioPlayerService.synchronizePlayback(for: nil)
+                return nil
             } else {
                 router.activeSession = session
+                appEnvironment.audioPlayerService.synchronizePlayback(for: session)
+                return session
             }
         } catch {
             assertionFailure("Failed to restore session: \(error)")
+            return session
         }
     }
 

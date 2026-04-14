@@ -31,6 +31,20 @@ struct SettingsView: View {
                         }
                         .pickerStyle(.segmented)
                         .accessibilityIdentifier("settings.soundPicker")
+
+                        HStack {
+                            Text("Level")
+                                .font(FFTypography.detail)
+                                .foregroundStyle(FFColors.textSecondary)
+                            Spacer()
+                            Text("\(Int(preferences.audioVolume * 100))%")
+                                .font(FFTypography.detail)
+                                .foregroundStyle(FFColors.textSecondary)
+                        }
+
+                        Slider(value: $preferences.audioVolume, in: 0...1)
+                            .tint(FFColors.accent)
+                            .accessibilityIdentifier("settings.volume")
                     }
                 }
 
@@ -49,7 +63,7 @@ struct SettingsView: View {
                 }
 
                 settingsCard(title: "About") {
-                    Text("\(AppBrand.name) keeps focus sessions quiet and simple.")
+                    Text("\(AppBrand.name) turns a focus block into a quiet flight.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }

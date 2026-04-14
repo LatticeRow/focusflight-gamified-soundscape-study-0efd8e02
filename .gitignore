@@ -6,6 +6,9 @@ build/
 *.xcscmblueprint
 *.moved-aside
 *.xcresult
+*.xcactivitylog
+*.ipa
+*.dSYM.zip
 
 # User data
 *.xcworkspace/xcuserdata/
@@ -17,6 +20,7 @@ build/
 
 # macOS
 .DS_Store
+*.swp
 
 # Local tooling
 .agentsight-codex-last.txt

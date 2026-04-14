@@ -77,7 +77,7 @@ final class PersistenceTests: XCTestCase {
     }
 
     @MainActor
-    func testPreferencesPersistDurationTrackAndHaptics() {
+    func testPreferencesPersistDurationTrackVolumeAndHaptics() {
         let suiteName = "PersistenceTests.\(#function)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
@@ -85,11 +85,13 @@ final class PersistenceTests: XCTestCase {
         let preferences = UserPreferences(defaults: defaults)
         preferences.defaultDurationMinutes = 50
         preferences.defaultAudioTrackID = UserPreferences.AudioTrack.night.id
+        preferences.audioVolume = 0.41
         preferences.hapticsEnabled = false
 
         let reloaded = UserPreferences(defaults: defaults)
         XCTAssertEqual(reloaded.defaultDurationMinutes, 50)
         XCTAssertEqual(reloaded.defaultAudioTrackID, UserPreferences.AudioTrack.night.id)
+        XCTAssertEqual(reloaded.audioVolume, 0.41, accuracy: 0.001)
         XCTAssertFalse(reloaded.hapticsEnabled)
     }
 }

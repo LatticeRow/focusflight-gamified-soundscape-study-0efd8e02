@@ -40,6 +40,7 @@
 		FF000000000000000000001F /* MetricPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000802 /* MetricPill.swift */; };
 		FF0000000000000000000020 /* RouteHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000803 /* RouteHeader.swift */; };
 		FF0000000000000000000021 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000901 /* Assets.xcassets */; };
+		FF0000000000000000000022 /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000902 /* Audio */; };
 		FF0000000000000000000023 /* routes.json in Resources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000603 /* routes.json */; };
 		FF0000000000000000000024 /* SessionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000B01 /* SessionEngineTests.swift */; };
 		FF0000000000000000000025 /* AchievementEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000B02 /* AchievementEngineTests.swift */; };
@@ -99,6 +100,7 @@
 		FF0000000000000000000802 /* MetricPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricPill.swift; sourceTree = "<group>"; };
 		FF0000000000000000000803 /* RouteHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteHeader.swift; sourceTree = "<group>"; };
 		FF0000000000000000000901 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FF0000000000000000000902 /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		FF0000000000000000000903 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF0000000000000000000B01 /* SessionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEngineTests.swift; sourceTree = "<group>"; };
 		FF0000000000000000000B02 /* AchievementEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementEngineTests.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				FF0000000000000000000901 /* Assets.xcassets */,
+				FF0000000000000000000902 /* Audio */,
 				FF0000000000000000000903 /* Info.plist */,
 			);
 			path = Resources;
@@ -471,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF0000000000000000000021 /* Assets.xcassets in Resources */,
+				FF0000000000000000000022 /* Audio in Resources */,
 				FF0000000000000000000023 /* routes.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,10 @@ final class AurelineUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["In Flight"].waitForExistence(timeout: 2))
 
+        app.buttons["session.soundToggle"].tap()
+        app.buttons["session.soundToggle"].tap()
+        app.sliders["session.volume"].adjust(toNormalizedSliderPosition: 0.35)
+
         app.buttons["session.pauseResume"].tap()
         app.buttons["session.pauseResume"].tap()
         app.buttons["session.end"].tap()
@@ -28,6 +32,7 @@ final class AurelineUITests: XCTestCase {
         app.tabBars.buttons["Settings"].tap()
         app.buttons["90m"].tap()
         app.buttons["Midnight"].tap()
+        app.sliders["settings.volume"].adjust(toNormalizedSliderPosition: 0.65)
         app.switches["settings.notifications"].tap()
         app.switches["settings.haptics"].tap()
     }
