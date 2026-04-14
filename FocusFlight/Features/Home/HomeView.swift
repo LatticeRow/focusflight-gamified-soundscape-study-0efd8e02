@@ -29,7 +29,7 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: FFSpacing.lg) {
+            VStack(alignment: .leading, spacing: FFSpacing.xl) {
                 heroCard
                 nextFlightCard
                 lastFlightCard
@@ -38,13 +38,18 @@ struct HomeView: View {
             .padding(.horizontal, FFSpacing.md)
             .padding(.vertical, FFSpacing.lg)
         }
-        .background(FFColors.background.ignoresSafeArea())
+        .background(FFScreenBackground())
         .navigationTitle(AppBrand.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.lg) {
+            Text(activeSession == nil ? "PRIVATE CABIN FOCUS" : "ACTIVE CABIN")
+                .font(FFTypography.eyebrow)
+                .tracking(1.3)
+                .foregroundStyle(FFColors.accentSoft)
+
             HStack(alignment: .center, spacing: FFSpacing.md) {
                 Image("LaunchBrand")
                     .resizable()
@@ -60,7 +65,7 @@ struct HomeView: View {
                         .font(FFTypography.heroTitle)
                         .foregroundStyle(FFColors.textPrimary)
 
-                    Text(activeSession == nil ? "Pick a route, set the time, and start." : "Your session is ready to resume.")
+                    Text(activeSession == nil ? "Quiet cabin focus, ready when you are." : "Your flight is in progress.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }
@@ -68,31 +73,27 @@ struct HomeView: View {
 
             HStack(spacing: FFSpacing.sm) {
                 MetricPill(label: "Route", value: route.codePair)
-                MetricPill(label: "Time", value: "\(durationMinutes)m")
+                MetricPill(label: "Length", value: "\(durationMinutes)m")
                 MetricPill(label: "Sound", value: audioTrackTitle)
             }
         }
         .padding(FFSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(FFColors.heroGradient)
-        .overlay {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .ffCardSurface(cornerRadius: 28, elevated: true)
     }
 
     private var nextFlightCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.md) {
-            Text(activeSession == nil ? "Next Flight" : "Current Flight")
-                .font(FFTypography.sectionTitle)
-                .foregroundStyle(FFColors.textPrimary)
+            sectionHeader(
+                title: activeSession == nil ? "Boarding Pass" : "Current Flight",
+                subtitle: activeSession == nil ? "Choose the route and length for this focus block." : "Resume where you left off."
+            )
 
             RouteCardView(route: route)
 
             VStack(alignment: .leading, spacing: FFSpacing.sm) {
-                Text("Duration")
-                    .font(FFTypography.detail)
+                Text("Length")
+                    .font(FFTypography.eyebrow)
                     .foregroundStyle(FFColors.textSecondary)
 
                 Picker("Duration", selection: $durationMinutes) {
@@ -116,21 +117,21 @@ struct HomeView: View {
                 .tint(FFColors.accentSoft)
                 .accessibilityIdentifier("home.changeRoute")
         }
+        .padding(FFSpacing.lg)
+        .ffCardSurface()
     }
 
     @ViewBuilder
     private var lastFlightCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.sm) {
-            Text("Last Flight")
-                .font(FFTypography.sectionTitle)
-                .foregroundStyle(FFColors.textPrimary)
+            sectionHeader(title: "Recent Arrival", subtitle: "Your latest completed focus flight.")
 
             if let session = completedSessions.first {
                 VStack(alignment: .leading, spacing: FFSpacing.sm) {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(session.routeThemeName)
-                                .font(.headline)
+                                .font(FFTypography.cardTitle)
                                 .foregroundStyle(FFColors.textPrimary)
                             Text("\(session.originCode) to \(session.destinationCode)")
                                 .font(FFTypography.detail)
@@ -150,29 +151,30 @@ struct HomeView: View {
                 }
                 .padding(FFSpacing.md)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(FFColors.panel)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .stroke(FFColors.stroke, lineWidth: 1)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .ffCardSurface(cornerRadius: 20)
             } else {
-                Text("Your completed flights show up here.")
+                Text("Completed flights appear here.")
                     .font(FFTypography.body)
                     .foregroundStyle(FFColors.textSecondary)
                     .padding(FFSpacing.md)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(FFColors.panel)
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .ffCardSurface(cornerRadius: 20)
             }
         }
     }
 
     private var totalsCard: some View {
-        HStack(spacing: FFSpacing.md) {
-            MetricPill(label: "Flights", value: "\(completedSessions.count)")
-            MetricPill(label: "Minutes", value: "\(totalMinutes)")
+        VStack(alignment: .leading, spacing: FFSpacing.md) {
+            sectionHeader(title: "Overview", subtitle: "A quick look at your recent momentum.")
+
+            HStack(spacing: FFSpacing.md) {
+                MetricPill(label: "Flights", value: "\(completedSessions.count)")
+                MetricPill(label: "Minutes", value: "\(totalMinutes)")
+                MetricPill(label: "Preset", value: "\(durationMinutes)m")
+            }
         }
+        .padding(FFSpacing.lg)
+        .ffCardSurface()
     }
 
     private var completedSessions: [FocusSession] {
@@ -181,5 +183,17 @@ struct HomeView: View {
 
     private var totalMinutes: Int {
         completedSessions.reduce(0) { $0 + $1.plannedMinutes }
+    }
+
+    private func sectionHeader(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(FFTypography.sectionTitle)
+                .foregroundStyle(FFColors.textPrimary)
+
+            Text(subtitle)
+                .font(FFTypography.detail)
+                .foregroundStyle(FFColors.textSecondary)
+        }
     }
 }

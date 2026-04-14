@@ -22,7 +22,9 @@ final class AudioPlayerService: NSObject, ObservableObject {
 
     private let bundle: Bundle
     private let audioSession: AVAudioSession
-    private var player: AVAudioPlayer?
+    private var player: AVQueuePlayer?
+    private var looper: AVPlayerLooper?
+    private var playerObservation: NSKeyValueObservation?
     private var cancellables = Set<AnyCancellable>()
     private var shouldResumeAfterInterruption = false
     private var didConfigureSession = false
@@ -96,11 +98,8 @@ final class AudioPlayerService: NSObject, ObservableObject {
             try configureAudioSessionIfNeeded()
             try audioSession.setActive(true)
             player?.volume = Float(volume)
-            if player?.isPlaying != true, player?.play() != true {
-                record(fallbackMessage: "Audio playback could not start.")
-                return
-            }
-            isPlaying = player?.isPlaying ?? false
+            player?.play()
+            isPlaying = player?.timeControlStatus == .playing
             shouldResumeAfterInterruption = false
             lastErrorDescription = nil
         } catch {
@@ -125,29 +124,28 @@ final class AudioPlayerService: NSObject, ObservableObject {
             return false
         }
 
-        do {
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.numberOfLoops = -1
-            player.volume = Float(volume)
-            player.prepareToPlay()
+        let item = AVPlayerItem(url: url)
+        let player = AVQueuePlayer()
+        player.automaticallyWaitsToMinimizeStalling = false
+        player.volume = Float(volume)
+        let looper = AVPlayerLooper(player: player, templateItem: item)
 
-            self.player = player
-            self.currentTrackID = track.id
-            self.currentAssetName = fileName
-            self.isPlaying = false
-            self.lastErrorDescription = nil
-            return true
-        } catch {
-            currentTrackID = track.id
-            currentAssetName = fileName
-            record(error: error, fallbackMessage: "The bundled cabin sound could not be loaded.")
-            return false
-        }
+        self.player = player
+        self.looper = looper
+        self.currentTrackID = track.id
+        self.currentAssetName = fileName
+        self.isPlaying = false
+        self.lastErrorDescription = nil
+        observePlayer(player)
+        return true
     }
 
     private func stop() {
-        player?.stop()
+        player?.pause()
+        player?.removeAllItems()
         player = nil
+        looper = nil
+        playerObservation = nil
         isPlaying = false
         currentTrackID = nil
         currentAssetName = nil
@@ -234,5 +232,13 @@ final class AudioPlayerService: NSObject, ObservableObject {
         }
         lastErrorDescription = fallbackMessage
         isPlaying = false
+    }
+
+    private func observePlayer(_ player: AVQueuePlayer) {
+        playerObservation = player.observe(\.timeControlStatus, options: [.initial, .new]) { [weak self] player, _ in
+            Task { @MainActor in
+                self?.isPlaying = player.timeControlStatus == .playing
+            }
+        }
     }
 }

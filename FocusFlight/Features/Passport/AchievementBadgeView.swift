@@ -8,11 +8,13 @@ struct AchievementBadgeView: View {
             Image(systemName: progress.definition.symbolName)
                 .font(.title2)
                 .foregroundStyle(progress.isUnlocked ? FFColors.accent : FFColors.textSecondary)
-                .frame(width: 40)
+                .frame(width: 42, height: 42)
+                .background(FFColors.panelRaised.opacity(0.72))
+                .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(progress.definition.title)
-                    .font(.headline)
+                    .font(FFTypography.cardTitle)
                     .foregroundStyle(FFColors.textPrimary)
 
                 Text(progress.definition.detail)
@@ -51,11 +53,6 @@ struct AchievementBadgeView: View {
             }
         }
         .padding(FFSpacing.md)
-        .background(FFColors.panel)
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .ffCardSurface(cornerRadius: 20)
     }
 }

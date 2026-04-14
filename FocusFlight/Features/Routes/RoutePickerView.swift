@@ -15,7 +15,7 @@ struct RoutePickerView: View {
                         .font(FFTypography.heroTitle)
                         .foregroundStyle(FFColors.textPrimary)
 
-                    Text("Pick one of the curated flights below.")
+                    Text("Pick the route for this session.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }
@@ -35,7 +35,7 @@ struct RoutePickerView: View {
             .padding(.horizontal, FFSpacing.md)
             .padding(.vertical, FFSpacing.lg)
         }
-        .background(FFColors.background)
+        .background(FFScreenBackground())
         .navigationTitle("Choose Route")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

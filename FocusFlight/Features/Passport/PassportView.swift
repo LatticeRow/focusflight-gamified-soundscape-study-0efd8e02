@@ -49,7 +49,7 @@ struct PassportView: View {
             .padding(.horizontal, FFSpacing.md)
             .padding(.vertical, FFSpacing.lg)
         }
-        .background(FFColors.background.ignoresSafeArea())
+        .background(FFScreenBackground())
         .navigationTitle("Passport")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -76,12 +76,7 @@ struct PassportView: View {
         }
         .padding(FFSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(FFColors.heroGradient)
-        .overlay {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .ffCardSurface(elevated: true)
         .accessibilityIdentifier("passport.summary")
     }
 
@@ -151,12 +146,7 @@ struct PassportView: View {
             .foregroundStyle(FFColors.textSecondary)
             .padding(FFSpacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(FFColors.panel)
-            .overlay {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(FFColors.stroke, lineWidth: 1)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .ffCardSurface(cornerRadius: 20)
     }
 
     private func sessionRow(for session: FocusSession) -> some View {
@@ -180,16 +170,11 @@ struct PassportView: View {
             Spacer()
 
             Text("\(session.plannedMinutes)m")
-                .font(.headline)
+                .font(FFTypography.cardTitle)
                 .foregroundStyle(FFColors.accentSoft)
         }
         .padding(FFSpacing.md)
-        .background(FFColors.panel)
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .ffCardSurface(cornerRadius: 20)
     }
 
     private func summaryLine(completedSessions: [FocusSession], unlockedCount: Int) -> String {
@@ -198,6 +183,6 @@ struct PassportView: View {
         }
 
         let route = "\(lastFlight.originCode) to \(lastFlight.destinationCode)"
-        return "\(completedSessions.count) flights logged. Last flight: \(route). \(unlockedCount) milestones unlocked."
+        return "\(completedSessions.count) flights logged. Last route: \(route). \(unlockedCount) milestones unlocked."
     }
 }

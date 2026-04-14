@@ -46,6 +46,29 @@ final class AurelineUITests: XCTestCase {
     }
 
     @MainActor
+    func testSettingsControlsRespond() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("-uiTestingInMemory")
+        app.launch()
+
+        app.tabBars.buttons["Settings"].tap()
+
+        app.buttons["50m"].tap()
+        app.buttons["90m"].tap()
+        app.buttons["25m"].tap()
+
+        app.buttons["Rain"].tap()
+        app.buttons["Midnight"].tap()
+        app.buttons["Signature"].tap()
+
+        app.sliders["settings.volume"].adjust(toNormalizedSliderPosition: 0.55)
+        app.switches["settings.notifications"].tap()
+        app.switches["settings.notifications"].tap()
+        app.switches["settings.haptics"].tap()
+        app.switches["settings.haptics"].tap()
+    }
+
+    @MainActor
     func testActiveSessionRestoresAfterRelaunch() throws {
         let app = XCUIApplication()
         app.launchArguments.append("-uiTesting")

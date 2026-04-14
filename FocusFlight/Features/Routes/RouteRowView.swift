@@ -9,11 +9,11 @@ struct RouteRowView: View {
             HStack(alignment: .top, spacing: FFSpacing.md) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(route.themeName)
-                        .font(FFTypography.detail)
+                        .font(FFTypography.eyebrow)
                         .foregroundStyle(FFColors.accentSoft)
 
                     Text(route.cityPair)
-                        .font(.headline)
+                        .font(FFTypography.cardTitle)
                         .foregroundStyle(FFColors.textPrimary)
 
                     Text(route.codePair)
@@ -30,18 +30,19 @@ struct RouteRowView: View {
 
             HStack(spacing: FFSpacing.md) {
                 MetricPill(label: "Distance", value: "\(route.distanceKm) km")
-                MetricPill(label: "Match", value: "\(route.estimatedMinutes)m")
+                MetricPill(label: "Best For", value: "\(route.estimatedMinutes)m")
                 MetricPill(label: "Sound", value: route.recommendedTrack.title)
             }
         }
         .padding(FFSpacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(FFColors.panel)
+        .background(FFColors.panelGradient)
         .overlay {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .stroke(isSelected ? FFColors.accent.opacity(0.9) : FFColors.stroke, lineWidth: isSelected ? 1.5 : 1)
         }
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .shadow(color: FFColors.shadow.opacity(isSelected ? 1 : 0.72), radius: isSelected ? 18 : 12, y: 8)
         .accessibilityIdentifier("route.\(route.id)")
     }
 }

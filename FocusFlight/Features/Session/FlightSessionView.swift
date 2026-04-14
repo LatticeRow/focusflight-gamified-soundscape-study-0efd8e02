@@ -28,12 +28,12 @@ struct FlightSessionView: View {
                     headerCard
 
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
-                        Text(isCompleted ? "Flight Complete" : "Time Left")
-                            .font(FFTypography.detail)
+                        Text(isCompleted ? "Arrived" : "Time Left")
+                            .font(FFTypography.eyebrow)
                             .foregroundStyle(FFColors.textSecondary)
 
                         Text(format(seconds: snapshot.remainingSeconds))
-                            .font(.system(size: 64, weight: .bold, design: .rounded))
+                            .font(FFTypography.displayMetric)
                             .foregroundStyle(FFColors.textPrimary)
                             .monospacedDigit()
                             .accessibilityIdentifier("session.remainingTime")
@@ -47,12 +47,7 @@ struct FlightSessionView: View {
                         }
                     }
                     .padding(FFSpacing.lg)
-                    .background(FFColors.panel)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .stroke(FFColors.stroke, lineWidth: 1)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                    .ffCardSurface()
 
                     HStack(spacing: FFSpacing.md) {
                         MetricPill(label: "Done", value: "\(Int(snapshot.progress * 100))%")
@@ -63,7 +58,7 @@ struct FlightSessionView: View {
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Cabin Sound")
+                                Text("Cabin Audio")
                                     .font(FFTypography.sectionTitle)
                                     .foregroundStyle(FFColors.textPrimary)
 
@@ -74,7 +69,7 @@ struct FlightSessionView: View {
 
                             Spacer()
 
-                            Button(audioPlayerService.isPlaybackEnabled ? "Mute" : "Play") {
+                            Button(audioPlayerService.isPlaybackEnabled ? "Sound Off" : "Sound On") {
                                 toggleAudio()
                             }
                             .buttonStyle(.bordered)
@@ -100,7 +95,7 @@ struct FlightSessionView: View {
                         }
 
                         if isPaused {
-                            Text("Sound resumes when you continue.")
+                            Text("Resume to bring the cabin back.")
                                 .font(FFTypography.detail)
                                 .foregroundStyle(FFColors.textSecondary)
                         } else if let error = audioPlayerService.lastErrorDescription {
@@ -110,16 +105,11 @@ struct FlightSessionView: View {
                         }
                     }
                     .padding(FFSpacing.lg)
-                    .background(FFColors.panel)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .stroke(FFColors.stroke, lineWidth: 1)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                    .ffCardSurface()
 
                     VStack(spacing: FFSpacing.md) {
                         if isCompleted {
-                            PrimaryButton(title: "Done", systemImage: "checkmark.circle.fill") {
+                            PrimaryButton(title: "Close", systemImage: "checkmark.circle.fill") {
                                 handleDone()
                             }
                             .accessibilityIdentifier("session.complete")
@@ -146,8 +136,8 @@ struct FlightSessionView: View {
             }
             .padding(.horizontal, FFSpacing.md)
             .padding(.vertical, FFSpacing.lg)
-            .background(FFColors.background.ignoresSafeArea())
-            .navigationTitle("In Flight")
+            .background(FFScreenBackground())
+            .navigationTitle("Session")
             .navigationBarTitleDisplayMode(.inline)
         }
         .confirmationDialog(
@@ -177,6 +167,11 @@ struct FlightSessionView: View {
 
     private var headerCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.md) {
+            Text("AURELINE SESSION")
+                .font(FFTypography.eyebrow)
+                .tracking(1.3)
+                .foregroundStyle(FFColors.accentSoft)
+
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: FFSpacing.xs) {
                     Text(route.themeName)
@@ -203,12 +198,7 @@ struct FlightSessionView: View {
         }
         .padding(FFSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(FFColors.heroGradient)
-        .overlay {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .ffCardSurface(elevated: true)
     }
 
     private func flightProgressBar(progress: Double) -> some View {
@@ -219,10 +209,16 @@ struct FlightSessionView: View {
 
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(FFColors.panelRaised)
+                    .fill(FFColors.panelRaised.opacity(0.9))
 
                 Capsule()
-                    .fill(FFColors.accent.opacity(0.95))
+                    .fill(
+                        LinearGradient(
+                            colors: [FFColors.accent, FFColors.accentSoft],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .frame(width: fillWidth)
 
                 Image(systemName: "airplane")

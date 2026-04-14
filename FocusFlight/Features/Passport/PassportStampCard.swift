@@ -8,7 +8,7 @@ struct PassportStampCard: View {
             HStack(alignment: .top, spacing: FFSpacing.md) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(stamp.title)
-                        .font(.headline)
+                        .font(FFTypography.cardTitle)
                         .foregroundStyle(FFColors.textPrimary)
 
                     Text("\(stamp.originCode) to \(stamp.destinationCode)")
@@ -19,7 +19,7 @@ struct PassportStampCard: View {
                 Spacer()
 
                 Text("\(stamp.minutesFlown)m")
-                    .font(.headline)
+                    .font(FFTypography.cardTitle)
                     .foregroundStyle(FFColors.accentSoft)
             }
 
@@ -35,16 +35,11 @@ struct PassportStampCard: View {
                     .foregroundStyle(FFColors.accent)
                     .padding(.horizontal, FFSpacing.sm)
                     .padding(.vertical, 6)
-                    .background(FFColors.panelRaised)
+                    .background(FFColors.panelRaised.opacity(0.85))
                     .clipShape(Capsule())
             }
         }
         .padding(FFSpacing.md)
-        .background(FFColors.panel)
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .ffCardSurface(cornerRadius: 20)
     }
 }

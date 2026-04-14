@@ -6,10 +6,12 @@ struct SettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: FFSpacing.lg) {
+                summaryCard
+
                 settingsCard(title: "Defaults") {
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
-                        Text("Duration")
-                            .font(FFTypography.detail)
+                        Text("Length")
+                            .font(FFTypography.eyebrow)
                             .foregroundStyle(FFColors.textSecondary)
 
                         Picker("Default duration", selection: $preferences.defaultDurationMinutes) {
@@ -21,7 +23,7 @@ struct SettingsView: View {
                         .accessibilityIdentifier("settings.durationPicker")
 
                         Text("Sound")
-                            .font(FFTypography.detail)
+                            .font(FFTypography.eyebrow)
                             .foregroundStyle(FFColors.textSecondary)
 
                         Picker("Sound", selection: $preferences.defaultAudioTrackID) {
@@ -50,7 +52,7 @@ struct SettingsView: View {
 
                 settingsCard(title: "Options") {
                     VStack(spacing: FFSpacing.md) {
-                        Toggle("Landing Reminder", isOn: $preferences.notificationsEnabled)
+                        Toggle("Session Reminder", isOn: $preferences.notificationsEnabled)
                             .tint(FFColors.accent)
                             .foregroundStyle(FFColors.textPrimary)
                             .accessibilityIdentifier("settings.notifications")
@@ -63,7 +65,7 @@ struct SettingsView: View {
                 }
 
                 settingsCard(title: "About") {
-                    Text("Quiet cabin sound for focused work.")
+                    Text("Aureline keeps one quiet route ready whenever you want to focus.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }
@@ -71,7 +73,7 @@ struct SettingsView: View {
             .padding(.horizontal, FFSpacing.md)
             .padding(.vertical, FFSpacing.lg)
         }
-        .background(FFColors.background.ignoresSafeArea())
+        .background(FFScreenBackground())
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -84,11 +86,31 @@ struct SettingsView: View {
             content()
         }
         .padding(FFSpacing.lg)
-        .background(FFColors.panel)
-        .overlay {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .stroke(FFColors.stroke, lineWidth: 1)
+        .ffCardSurface()
+    }
+
+    private var summaryCard: some View {
+        HStack(alignment: .center, spacing: FFSpacing.md) {
+            Image("LaunchBrand")
+                .resizable()
+                .renderingMode(.original)
+                .scaledToFit()
+                .frame(width: 48, height: 48)
+                .padding(12)
+                .background(FFColors.panelRaised.opacity(0.82))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(AppBrand.name)
+                    .font(FFTypography.sectionTitle)
+                    .foregroundStyle(FFColors.textPrimary)
+
+                Text("Set the flight length, sound, and reminders you want ready by default.")
+                    .font(FFTypography.detail)
+                    .foregroundStyle(FFColors.textSecondary)
+            }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .padding(FFSpacing.lg)
+        .ffCardSurface(elevated: true)
     }
 }

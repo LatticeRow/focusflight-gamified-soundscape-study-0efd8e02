@@ -13,6 +13,7 @@ build/
 *.xcactivitylog
 *.xctestrun
 *.ipa
+*.xcarchive
 *.dSYM.zip
 
 # User data
@@ -27,6 +28,10 @@ build/
 .DS_Store
 *.swp
 *.orig
+
+# Editors
+.idea/
+.vscode/
 
 # Local tooling
 .agentsight-codex-last.txt
