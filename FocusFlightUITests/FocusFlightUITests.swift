@@ -29,6 +29,23 @@ final class AurelineUITests: XCTestCase {
     }
 
     @MainActor
+    func testStartAndCompleteSessionFlow() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-uiTestingInMemory", "-uiTestingFastCompletion"]
+        app.launch()
+
+        app.buttons["home.startFlight"].tap()
+
+        XCTAssertTrue(app.buttons["session.complete"].waitForExistence(timeout: 3))
+        app.buttons["session.complete"].tap()
+
+        XCTAssertTrue(app.buttons["home.startFlight"].waitForExistence(timeout: 2))
+
+        app.tabBars.buttons["Passport"].tap()
+        XCTAssertTrue(app.staticTexts["Stamped"].waitForExistence(timeout: 2))
+    }
+
+    @MainActor
     func testActiveSessionRestoresAfterRelaunch() throws {
         let app = XCUIApplication()
         app.launchArguments.append("-uiTesting")

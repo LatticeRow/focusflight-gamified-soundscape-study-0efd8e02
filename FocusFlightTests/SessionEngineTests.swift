@@ -116,6 +116,83 @@ final class SessionEngineTests: XCTestCase {
         XCTAssertEqual(session.remainingDistanceKm, 0)
         XCTAssertEqual(session.completedAt, session.expectedEndAt)
     }
+
+    func testRestoreDoesNotAutoCompletePausedSessionThatPassedExpectedEndTime() {
+        let startedAt = Date(timeIntervalSince1970: 30_000)
+        let session = engine.startSession(
+            route: route,
+            plannedMinutes: 25,
+            selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
+            startedAt: startedAt
+        )
+
+        _ = engine.pause(
+            session,
+            at: startedAt.addingTimeInterval(600),
+            routeDistanceKm: route.distanceKm
+        )
+
+        let restored = engine.restore(
+            session,
+            routeDistanceKm: route.distanceKm,
+            now: startedAt.addingTimeInterval(3_600)
+        )
+
+        XCTAssertEqual(session.status, .paused)
+        XCTAssertNil(session.completedAt)
+        XCTAssertEqual(restored.elapsedSeconds, 600)
+        XCTAssertEqual(restored.remainingSeconds, 900)
+        XCTAssertEqual(restored.progress, 0.4, accuracy: 0.001)
+    }
+
+    func testCompleteUsesManualCompletionDateBeforeExpectedEnd() {
+        let startedAt = Date(timeIntervalSince1970: 40_000)
+        let completionDate = startedAt.addingTimeInterval(900)
+        let session = engine.startSession(
+            route: route,
+            plannedMinutes: 25,
+            selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
+            startedAt: startedAt
+        )
+
+        let snapshot = engine.complete(
+            session,
+            at: completionDate,
+            routeDistanceKm: route.distanceKm
+        )
+
+        XCTAssertEqual(snapshot.progress, 0.6, accuracy: 0.001)
+        XCTAssertEqual(snapshot.remainingSeconds, 600)
+        XCTAssertEqual(session.status, .completed)
+        XCTAssertEqual(session.completedAt, completionDate)
+        XCTAssertEqual(session.completionPercent, 1, accuracy: 0.001)
+        XCTAssertEqual(session.elapsedFocusSeconds, 1_500)
+        XCTAssertEqual(session.traveledDistanceKm, route.distanceKm)
+        XCTAssertEqual(session.remainingDistanceKm, 0)
+    }
+
+    func testCancelPreservesSnapshotAndMarksCancelled() {
+        let startedAt = Date(timeIntervalSince1970: 50_000)
+        let session = engine.startSession(
+            route: route,
+            plannedMinutes: 25,
+            selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
+            startedAt: startedAt
+        )
+
+        let snapshot = engine.cancel(
+            session,
+            at: startedAt.addingTimeInterval(300),
+            routeDistanceKm: route.distanceKm
+        )
+
+        XCTAssertEqual(session.status, .cancelled)
+        XCTAssertNil(session.completedAt)
+        XCTAssertNotNil(session.cancelledAt)
+        XCTAssertEqual(snapshot.elapsedSeconds, 300)
+        XCTAssertEqual(session.elapsedFocusSeconds, 300)
+        XCTAssertEqual(session.completionPercent, 0.2, accuracy: 0.001)
+    }
 }
 
 @MainActor

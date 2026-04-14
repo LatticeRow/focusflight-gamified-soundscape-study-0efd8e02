@@ -48,7 +48,71 @@ final class AchievementEngineTests: XCTestCase {
         XCTAssertNotNil(progress["frequent-flyer"]?.unlockedAt)
     }
 
+    func testAchievementProgressIgnoresIncompleteSessions() {
+        let engine = AchievementEngine()
+        let sessions = [
+            makeCompletedSession(minutes: 25, completedAtHour: 10, dayOffset: 0),
+            makeSession(minutes: 50, status: .active, completedAtHour: 22, dayOffset: 1),
+            makeSession(minutes: 90, status: .cancelled, completedAtHour: 23, dayOffset: 2),
+        ]
+
+        let progress = Dictionary(
+            uniqueKeysWithValues: engine.achievementProgress(for: sessions).map { ($0.id, $0) }
+        )
+
+        XCTAssertTrue(progress["first-flight"]?.isUnlocked == true)
+        XCTAssertFalse(progress["frequent-flyer"]?.isUnlocked == true)
+        XCTAssertEqual(progress["long-haul"]?.progressLabel, "25/300m")
+        XCTAssertFalse(progress["red-eye"]?.isUnlocked == true)
+    }
+
+    func testAchievementUnlockedDatesReflectEarliestQualifyingCompletion() {
+        let engine = AchievementEngine()
+        let sessions = [
+            makeCompletedSession(minutes: 25, completedAtHour: 9, dayOffset: 0),
+            makeCompletedSession(minutes: 50, completedAtHour: 10, dayOffset: 1),
+            makeCompletedSession(minutes: 90, completedAtHour: 11, dayOffset: 2),
+            makeCompletedSession(minutes: 50, completedAtHour: 12, dayOffset: 3),
+            makeCompletedSession(minutes: 100, completedAtHour: 22, dayOffset: 4),
+        ]
+
+        let progress = Dictionary(
+            uniqueKeysWithValues: engine.achievementProgress(for: sessions).map { ($0.id, $0) }
+        )
+
+        XCTAssertEqual(
+            progress["first-flight"]?.unlockedAt,
+            sessions[0].completedAt
+        )
+        XCTAssertEqual(
+            progress["frequent-flyer"]?.unlockedAt,
+            sessions[4].completedAt
+        )
+        XCTAssertEqual(
+            progress["long-haul"]?.unlockedAt,
+            sessions[4].completedAt
+        )
+        XCTAssertEqual(
+            progress["red-eye"]?.unlockedAt,
+            sessions[4].completedAt
+        )
+    }
+
     private func makeCompletedSession(minutes: Int, completedAtHour: Int, dayOffset: Int) -> FocusSession {
+        makeSession(
+            minutes: minutes,
+            status: .completed,
+            completedAtHour: completedAtHour,
+            dayOffset: dayOffset
+        )
+    }
+
+    private func makeSession(
+        minutes: Int,
+        status: FocusSession.Status,
+        completedAtHour: Int,
+        dayOffset: Int
+    ) -> FocusSession {
         let calendar = Calendar.current
         let completedAt = calendar.date(
             from: DateComponents(year: 2026, month: 4, day: 13 + dayOffset, hour: completedAtHour, minute: 0)
@@ -61,14 +125,15 @@ final class AchievementEngineTests: XCTestCase {
             destinationCode: "JFK",
             startedAt: completedAt.addingTimeInterval(TimeInterval(-minutes * 60)),
             expectedEndAt: completedAt,
-            completedAt: completedAt,
+            completedAt: status == .completed ? completedAt : nil,
+            cancelledAt: status == .cancelled ? completedAt : nil,
             plannedMinutes: minutes,
-            status: .completed,
+            status: status,
             selectedAudioTrackID: UserPreferences.AudioTrack.steady.id,
-            completionPercent: 1,
-            elapsedFocusSeconds: minutes * 60,
-            traveledDistanceKm: 4_162,
-            remainingDistanceKm: 0
+            completionPercent: status == .completed ? 1 : 0.25,
+            elapsedFocusSeconds: status == .completed ? minutes * 60 : 300,
+            traveledDistanceKm: status == .completed ? 4_162 : 900,
+            remainingDistanceKm: status == .completed ? 0 : 3_262
         )
     }
 }

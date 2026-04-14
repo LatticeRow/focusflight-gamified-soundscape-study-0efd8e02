@@ -106,10 +106,15 @@ struct AppCoordinator: View {
             return
         }
 
+        let startedAt = ProcessInfo.processInfo.arguments.contains("-uiTestingFastCompletion")
+            ? Date().addingTimeInterval(TimeInterval(max(preferences.defaultDurationMinutes * 60 - 1, 0) * -1))
+            : .now
+
         let session = appEnvironment.sessionEngine.startSession(
             route: selectedRoute,
             plannedMinutes: preferences.defaultDurationMinutes,
-            selectedAudioTrackID: preferences.defaultAudioTrackID
+            selectedAudioTrackID: preferences.defaultAudioTrackID,
+            startedAt: startedAt
         )
 
         do {
