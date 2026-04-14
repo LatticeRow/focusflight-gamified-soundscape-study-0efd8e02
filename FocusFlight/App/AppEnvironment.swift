@@ -39,17 +39,10 @@ final class AppRouter: ObservableObject {
         case settings
     }
 
-    struct SessionDraft: Identifiable, Equatable {
-        let id = UUID()
-        let route: FlightRoute
-        let plannedMinutes: Int
-        let selectedAudioTrackID: String
-    }
-
     @Published var selectedTab: Tab = .home
     @Published var selectedRouteID: String?
     @Published var isRoutePickerPresented = false
-    @Published var activeSession: SessionDraft?
+    @Published var activeSession: FocusSession?
 
     init(initialRouteID: String?) {
         self.selectedRouteID = initialRouteID

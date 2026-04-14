@@ -66,11 +66,11 @@ struct HomeView: View {
 
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.md) {
-            Text("Settle in and focus.")
+            Text("Choose a route and start.")
                 .font(FFTypography.heroTitle)
                 .foregroundStyle(FFColors.textPrimary)
 
-            Text("Pick a route and let the cabin carry the session.")
+            Text("Stay with the timer until you land.")
                 .font(FFTypography.body)
                 .foregroundStyle(FFColors.textSecondary)
 
@@ -118,7 +118,7 @@ struct HomeView: View {
                 .background(FFColors.panel)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             } else {
-                Text("Your first stamp will land here.")
+                Text("Completed sessions appear here.")
                     .font(FFTypography.body)
                     .foregroundStyle(FFColors.textSecondary)
                     .padding(FFSpacing.md)

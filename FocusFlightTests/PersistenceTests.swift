@@ -18,7 +18,10 @@ final class PersistenceTests: XCTestCase {
             plannedMinutes: 50,
             status: .active,
             selectedAudioTrackID: "rain",
-            completionPercent: 0.35
+            completionPercent: 0.35,
+            elapsedFocusSeconds: 1_050,
+            traveledDistanceKm: 973,
+            remainingDistanceKm: 1_807
         )
 
         let completedSession = FocusSession(
@@ -32,7 +35,10 @@ final class PersistenceTests: XCTestCase {
             plannedMinutes: 25,
             status: .completed,
             selectedAudioTrackID: "steady",
-            completionPercent: 1
+            completionPercent: 1,
+            elapsedFocusSeconds: 1_500,
+            traveledDistanceKm: 4_162,
+            remainingDistanceKm: 0
         )
 
         let stamp = PassportStamp(
@@ -57,6 +63,8 @@ final class PersistenceTests: XCTestCase {
         XCTAssertEqual(stamps.count, 1)
         XCTAssertEqual(sessions.first(where: { $0.routeID == "sea-ord" })?.status, .active)
         XCTAssertEqual(sessions.first(where: { $0.routeID == "sfo-jfk" })?.status, .completed)
+        XCTAssertEqual(sessions.first(where: { $0.routeID == "sfo-jfk" })?.traveledDistanceKm, 4_162)
+        XCTAssertEqual(sessions.first(where: { $0.routeID == "sfo-jfk" })?.remainingDistanceKm, 0)
     }
 
     @MainActor

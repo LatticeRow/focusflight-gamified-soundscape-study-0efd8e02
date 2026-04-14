@@ -49,7 +49,7 @@ struct SettingsView: View {
                 }
 
                 settingsCard(title: "About") {
-                    Text("\(AppBrand.name) keeps each session calm and contained.")
+                    Text("\(AppBrand.name) keeps focus sessions quiet and simple.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }

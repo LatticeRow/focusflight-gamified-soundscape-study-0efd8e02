@@ -45,7 +45,7 @@ struct PassportView: View {
 
                 if selectedSection == .stamps {
                     if stamps.isEmpty {
-                        Text("Your stamps will appear after your first flight.")
+                        Text("Finish a session to see it here.")
                             .font(FFTypography.body)
                             .foregroundStyle(FFColors.textSecondary)
                             .padding(FFSpacing.md)

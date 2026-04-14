@@ -1,10 +1,11 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct FlightSessionView: View {
     @Environment(\.modelContext) private var modelContext
 
-    let sessionDraft: AppRouter.SessionDraft
+    let session: FocusSession
+    let route: FlightRoute
     @ObservedObject var preferences: UserPreferences
     let sessionEngine: SessionEngine
     let sessionRepository: SessionRepository
@@ -12,12 +13,8 @@ struct FlightSessionView: View {
     let notificationService: NotificationService
     let onClose: () -> Void
 
-    @State private var startedAt = Date()
     @State private var now = Date()
-    @State private var pausedAt: Date?
-    @State private var pausedAccumulatedSeconds: TimeInterval = 0
-    @State private var sessionRecord: FocusSession?
-    @State private var hasCompletedSession = false
+    @State private var hasLoaded = false
 
     private let sessionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -27,7 +24,7 @@ struct FlightSessionView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: FFSpacing.lg) {
-                    RouteHeader(route: sessionDraft.route)
+                    RouteHeader(route: route)
 
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
                         Text(format(seconds: snapshot.remainingSeconds))
@@ -40,21 +37,22 @@ struct FlightSessionView: View {
                             .scaleEffect(x: 1, y: 2.5, anchor: .center)
 
                         HStack(spacing: FFSpacing.md) {
+                            MetricPill(label: "Done", value: "\(Int(snapshot.progress * 100))%")
                             MetricPill(label: "Flown", value: "\(snapshot.distanceTraveledKm) km")
-                            MetricPill(label: "Remaining", value: "\(snapshot.distanceRemainingKm) km")
+                            MetricPill(label: "Left", value: "\(snapshot.distanceRemainingKm) km")
                         }
                     }
                     .padding(FFSpacing.lg)
                     .background(FFColors.panel)
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
-                    Text("Sound: \(selectedTrack.title)")
+                    Text(selectedTrack.title)
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
 
                     HStack(spacing: FFSpacing.md) {
-                        if !hasCompletedSession {
-                            Button(pausedAt == nil ? "Pause Flight" : "Resume Flight") {
+                        if !isTerminal {
+                            Button(isPaused ? "Resume" : "Pause") {
                                 togglePause()
                             }
                             .buttonStyle(.borderedProminent)
@@ -63,8 +61,8 @@ struct FlightSessionView: View {
                             .accessibilityIdentifier("session.pauseResume")
                         }
 
-                        Button(hasCompletedSession ? "Done" : "End Flight") {
-                            handleClose(snapshot: snapshot)
+                        Button(isCompleted ? "Done" : "End") {
+                            handleClose()
                         }
                         .buttonStyle(.bordered)
                         .tint(FFColors.accentSoft)
@@ -80,131 +78,117 @@ struct FlightSessionView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Close") {
-                        handleClose(snapshot: snapshot)
+                        handleClose()
                     }
                 }
             }
         }
         .onAppear {
-            startedAt = Date()
-            now = startedAt
-            persistSessionIfNeeded()
-            audioPlayerService.preload(trackID: sessionDraft.selectedAudioTrackID)
-            if preferences.notificationsEnabled {
+            guard !hasLoaded else { return }
+            hasLoaded = true
+            refresh(at: .now)
+            audioPlayerService.preload(trackID: session.selectedAudioTrackID)
+            if preferences.notificationsEnabled, session.status == .active {
                 notificationService.requestAuthorizationIfNeeded()
+                notificationService.scheduleCompletionNotification(for: session, route: route)
             }
         }
         .onReceive(sessionTimer) { value in
-            guard pausedAt == nil, !hasCompletedSession else { return }
-            now = value
+            guard session.status == .active else { return }
+            refresh(at: value)
+        }
+    }
 
-            if currentSnapshot.remainingSeconds == 0 {
-                completeSessionIfNeeded(at: value)
-            }
+    private var currentSnapshot: SessionSnapshot {
+        sessionEngine.snapshot(for: session, routeDistanceKm: route.distanceKm, now: now)
+    }
+
+    private var isPaused: Bool {
+        session.status == .paused
+    }
+
+    private var isCompleted: Bool {
+        session.status == .completed
+    }
+
+    private var isTerminal: Bool {
+        session.status == .completed || session.status == .cancelled
+    }
+
+    private var selectedTrack: UserPreferences.AudioTrack {
+        UserPreferences.AudioTrack(rawValue: session.selectedAudioTrackID) ?? .fallback
+    }
+
+    private func refresh(at date: Date) {
+        now = date
+        let previousStatus = session.status
+        _ = sessionEngine.restore(session, routeDistanceKm: route.distanceKm, now: date)
+
+        if previousStatus != .completed, session.status == .completed {
+            finalizeCompletion()
+        } else {
+            persistChanges()
         }
     }
 
     private func togglePause() {
-        let now = Date()
-        if let pausedAt {
-            pausedAccumulatedSeconds += now.timeIntervalSince(pausedAt)
-            self.pausedAt = nil
-            sessionRecord?.pausedAt = nil
-            sessionRecord?.pausedAccumulatedSeconds = pausedAccumulatedSeconds
-            sessionRecord?.expectedEndAt = sessionEngine.expectedEndDate(
-                startedAt: startedAt,
-                plannedMinutes: sessionDraft.plannedMinutes,
-                pausedAccumulatedSeconds: pausedAccumulatedSeconds
-            )
-            sessionRecord?.status = .active
+        let eventDate = Date()
+        now = eventDate
+
+        if isPaused {
+            _ = sessionEngine.resume(session, at: eventDate, routeDistanceKm: route.distanceKm)
+            if preferences.notificationsEnabled {
+                notificationService.scheduleCompletionNotification(for: session, route: route)
+            }
         } else {
-            pausedAt = now
-            sessionRecord?.pausedAt = now
-            sessionRecord?.status = .paused
+            _ = sessionEngine.pause(session, at: eventDate, routeDistanceKm: route.distanceKm)
+            notificationService.cancelNotification(for: session.id)
         }
 
-        try? sessionRepository.saveChanges(in: modelContext)
+        persistChanges()
+    }
+
+    private func finalizeCompletion() {
+        notificationService.cancelNotification(for: session.id)
+
+        do {
+            try sessionRepository.saveChanges(in: modelContext)
+            _ = try sessionRepository.stamp(for: session, in: modelContext)
+        } catch {
+            assertionFailure("Failed to complete session: \(error)")
+        }
+    }
+
+    private func handleClose() {
+        if isCompleted {
+            onClose()
+            return
+        }
+
+        if currentSnapshot.isComplete {
+            _ = sessionEngine.complete(session, at: now, routeDistanceKm: route.distanceKm)
+            finalizeCompletion()
+            onClose()
+            return
+        }
+
+        _ = sessionEngine.cancel(session, at: .now, routeDistanceKm: route.distanceKm)
+        notificationService.cancelNotification(for: session.id)
+        persistChanges()
+        onClose()
+    }
+
+    private func persistChanges() {
+        do {
+            try sessionRepository.saveChanges(in: modelContext)
+        } catch {
+            assertionFailure("Failed to save session state: \(error)")
+        }
     }
 
     private func format(seconds: Int) -> String {
         let minutes = seconds / 60
         let remainingSeconds = seconds % 60
         return String(format: "%02d:%02d", minutes, remainingSeconds)
-    }
-
-    private var currentSnapshot: SessionSnapshot {
-        sessionEngine.snapshot(
-            now: pausedAt ?? now,
-            startedAt: startedAt,
-            plannedMinutes: sessionDraft.plannedMinutes,
-            routeDistanceKm: sessionDraft.route.distanceKm,
-            pausedAccumulatedSeconds: pausedAccumulatedSeconds
-        )
-    }
-
-    private var selectedTrack: UserPreferences.AudioTrack {
-        UserPreferences.AudioTrack(rawValue: sessionDraft.selectedAudioTrackID) ?? .fallback
-    }
-
-    private func persistSessionIfNeeded() {
-        guard sessionRecord == nil else { return }
-
-        let session = FocusSession(
-            routeID: sessionDraft.route.id,
-            routeThemeName: sessionDraft.route.themeName,
-            originCode: sessionDraft.route.originCode,
-            destinationCode: sessionDraft.route.destinationCode,
-            startedAt: startedAt,
-            expectedEndAt: sessionEngine.expectedEndDate(
-                startedAt: startedAt,
-                plannedMinutes: sessionDraft.plannedMinutes
-            ),
-            plannedMinutes: sessionDraft.plannedMinutes,
-            status: .active,
-            selectedAudioTrackID: sessionDraft.selectedAudioTrackID
-        )
-
-        do {
-            try sessionRepository.insert(session, in: modelContext)
-            sessionRecord = session
-        } catch {
-            assertionFailure("Failed to persist session: \(error)")
-        }
-    }
-
-    private func completeSessionIfNeeded(at completionDate: Date) {
-        guard let sessionRecord, !hasCompletedSession else { return }
-
-        sessionRecord.completedAt = completionDate
-        sessionRecord.completionPercent = 1
-        sessionRecord.status = .completed
-        sessionRecord.pausedAt = nil
-
-        do {
-            try sessionRepository.saveChanges(in: modelContext)
-            _ = try sessionRepository.stamp(for: sessionRecord, in: modelContext)
-            hasCompletedSession = true
-        } catch {
-            assertionFailure("Failed to complete session: \(error)")
-        }
-    }
-
-    private func handleClose(snapshot: SessionSnapshot) {
-        if hasCompletedSession {
-            onClose()
-            return
-        }
-
-        if snapshot.remainingSeconds == 0 {
-            completeSessionIfNeeded(at: now)
-            onClose()
-            return
-        }
-
-        sessionRecord?.status = .cancelled
-        sessionRecord?.cancelledAt = Date()
-        sessionRecord?.completionPercent = snapshot.progress
-        try? sessionRepository.saveChanges(in: modelContext)
-        onClose()
     }
 }

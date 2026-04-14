@@ -19,7 +19,7 @@ struct RouteCardView: View {
 
             HStack(spacing: FFSpacing.md) {
                 MetricPill(label: "Distance", value: "\(route.distanceKm) km")
-                MetricPill(label: "Best Fit", value: "\(route.estimatedMinutes)m")
+                MetricPill(label: "Match", value: "\(route.estimatedMinutes)m")
             }
         }
         .padding(FFSpacing.lg)

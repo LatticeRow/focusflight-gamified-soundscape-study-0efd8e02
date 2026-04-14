@@ -20,7 +20,7 @@ struct RoutePickerView: View {
         }
         .scrollContentBackground(.hidden)
         .background(FFColors.background)
-        .navigationTitle("Routes")
+        .navigationTitle("Choose Route")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Close") {

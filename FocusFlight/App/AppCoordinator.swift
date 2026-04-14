@@ -2,7 +2,10 @@ import SwiftData
 import SwiftUI
 
 struct AppCoordinator: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Query(sort: \FocusSession.startedAt, order: .reverse) private var sessions: [FocusSession]
+
     let appEnvironment: AppEnvironment
     @ObservedObject private var router: AppRouter
     @ObservedObject private var preferences: UserPreferences
@@ -28,13 +31,7 @@ struct AppCoordinator: View {
                     audioTrackTitle: appEnvironment.routeRepository.audioTrack(id: preferences.defaultAudioTrackID)?.title
                         ?? preferences.defaultAudioTrack.title,
                     onChangeRoute: { router.isRoutePickerPresented = true },
-                    onStartFlight: {
-                        router.activeSession = .init(
-                            route: selectedRoute,
-                            plannedMinutes: preferences.defaultDurationMinutes,
-                            selectedAudioTrackID: preferences.defaultAudioTrack.id
-                        )
-                    }
+                    onStartFlight: startSession
                 )
             }
             .tabItem {
@@ -73,9 +70,10 @@ struct AppCoordinator: View {
             }
             .presentationDetents([.medium, .large])
         }
-        .fullScreenCover(item: $router.activeSession) { draft in
+        .fullScreenCover(item: $router.activeSession) { session in
             FlightSessionView(
-                sessionDraft: draft,
+                session: session,
+                route: route(for: session),
                 preferences: preferences,
                 sessionEngine: appEnvironment.sessionEngine,
                 sessionRepository: appEnvironment.sessionRepository,
@@ -85,8 +83,66 @@ struct AppCoordinator: View {
                 router.activeSession = nil
             }
         }
+        .task {
+            synchronizeActiveSession()
+        }
         .onChange(of: scenePhase) { _, phase in
             appEnvironment.lifecycleCoordinator.handle(phase: phase)
+            if phase == .active {
+                synchronizeActiveSession()
+            }
         }
+    }
+
+    private func startSession() {
+        if let existing = sessions.first(where: \.isActiveLike) {
+            router.activeSession = existing
+            return
+        }
+
+        let session = appEnvironment.sessionEngine.startSession(
+            route: selectedRoute,
+            plannedMinutes: preferences.defaultDurationMinutes,
+            selectedAudioTrackID: preferences.defaultAudioTrackID
+        )
+
+        do {
+            try appEnvironment.sessionRepository.insert(session, in: modelContext)
+            if preferences.notificationsEnabled {
+                appEnvironment.notificationService.requestAuthorizationIfNeeded()
+                appEnvironment.notificationService.scheduleCompletionNotification(for: session, route: selectedRoute)
+            }
+            router.activeSession = session
+        } catch {
+            assertionFailure("Failed to start session: \(error)")
+        }
+    }
+
+    private func synchronizeActiveSession() {
+        guard let session = sessions.first(where: \.isActiveLike) else {
+            router.activeSession = nil
+            return
+        }
+
+        let route = route(for: session)
+        _ = appEnvironment.sessionEngine.restore(session, routeDistanceKm: route.distanceKm)
+
+        do {
+            try appEnvironment.sessionRepository.saveChanges(in: modelContext)
+
+            if session.status == .completed {
+                _ = try appEnvironment.sessionRepository.stamp(for: session, in: modelContext)
+                appEnvironment.notificationService.cancelNotification(for: session.id)
+                router.activeSession = nil
+            } else {
+                router.activeSession = session
+            }
+        } catch {
+            assertionFailure("Failed to restore session: \(error)")
+        }
+    }
+
+    private func route(for session: FocusSession) -> FlightRoute {
+        appEnvironment.routeRepository.route(id: session.routeID) ?? .placeholder
     }
 }
