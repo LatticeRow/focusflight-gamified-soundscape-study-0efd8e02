@@ -24,17 +24,8 @@ final class AurelineUITests: XCTestCase {
 
         app.buttons["session.pauseResume"].tap()
         app.buttons["session.pauseResume"].tap()
-        app.buttons["session.end"].tap()
-
-        app.tabBars.buttons["Passport"].tap()
-        app.buttons["Milestones"].tap()
-
-        app.tabBars.buttons["Settings"].tap()
-        app.buttons["90m"].tap()
-        app.buttons["Midnight"].tap()
-        app.sliders["settings.volume"].adjust(toNormalizedSliderPosition: 0.65)
-        app.switches["settings.notifications"].tap()
-        app.switches["settings.haptics"].tap()
+        app.buttons["session.cancel"].tap()
+        app.buttons["Cancel Flight"].tap()
     }
 
     @MainActor
@@ -52,6 +43,7 @@ final class AurelineUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["session.remainingTime"].waitForExistence(timeout: 2))
         XCTAssertTrue(app.buttons["session.pauseResume"].exists)
-        app.buttons["session.end"].tap()
+        app.buttons["session.cancel"].tap()
+        app.buttons["Cancel Flight"].tap()
     }
 }

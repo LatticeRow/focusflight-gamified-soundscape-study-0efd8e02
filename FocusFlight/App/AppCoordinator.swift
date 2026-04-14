@@ -26,7 +26,8 @@ struct AppCoordinator: View {
         TabView(selection: $router.selectedTab) {
             NavigationStack {
                 HomeView(
-                    route: selectedRoute,
+                    route: router.activeSession.map(route(for:)) ?? selectedRoute,
+                    activeSession: router.activeSession,
                     durationMinutes: $preferences.defaultDurationMinutes,
                     audioTrackTitle: appEnvironment.routeRepository.audioTrack(id: preferences.defaultAudioTrackID)?.title
                         ?? preferences.defaultAudioTrack.title,

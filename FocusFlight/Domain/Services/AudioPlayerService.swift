@@ -230,10 +230,9 @@ final class AudioPlayerService: NSObject, ObservableObject {
 
     private func record(error: Error? = nil, fallbackMessage: String) {
         if let error {
-            lastErrorDescription = "\(fallbackMessage) (\(error.localizedDescription))"
-        } else {
-            lastErrorDescription = fallbackMessage
+            NSLog("AudioPlayerService error: %@", String(describing: error))
         }
+        lastErrorDescription = fallbackMessage
         isPlaying = false
     }
 }

@@ -2,9 +2,13 @@
 DerivedData/
 build/
 *.xcuserstate
+*.xcuserdatad/
 *.xccheckout
 *.xcscmblueprint
 *.moved-aside
+*.mode1v3
+*.mode2v3
+*.perspectivev3
 *.xcresult
 *.xcactivitylog
 *.ipa
@@ -21,6 +25,7 @@ build/
 # macOS
 .DS_Store
 *.swp
+*.orig
 
 # Local tooling
 .agentsight-codex-last.txt

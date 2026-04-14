@@ -6,20 +6,24 @@ struct RouteCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: FFSpacing.md) {
             HStack(alignment: .top) {
-                RouteHeader(route: route)
+                VStack(alignment: .leading, spacing: FFSpacing.sm) {
+                    Text(route.themeName)
+                        .font(FFTypography.detail)
+                        .foregroundStyle(FFColors.accentSoft)
+                        .padding(.horizontal, FFSpacing.sm)
+                        .padding(.vertical, 6)
+                        .background(FFColors.panelRaised)
+                        .clipShape(Capsule())
+
+                    RouteHeader(route: route)
+                }
                 Spacer()
-                Text(route.themeName)
-                    .font(FFTypography.detail)
-                    .foregroundStyle(FFColors.accentSoft)
-                    .padding(.horizontal, FFSpacing.sm)
-                    .padding(.vertical, 6)
-                    .background(FFColors.panelRaised)
-                    .clipShape(Capsule())
             }
 
             HStack(spacing: FFSpacing.md) {
                 MetricPill(label: "Distance", value: "\(route.distanceKm) km")
                 MetricPill(label: "Match", value: "\(route.estimatedMinutes)m")
+                MetricPill(label: "Sound", value: route.recommendedTrack.title)
             }
         }
         .padding(FFSpacing.lg)

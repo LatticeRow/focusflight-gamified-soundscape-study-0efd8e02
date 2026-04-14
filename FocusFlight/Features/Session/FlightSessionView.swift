@@ -15,6 +15,7 @@ struct FlightSessionView: View {
 
     @State private var now = Date()
     @State private var hasLoaded = false
+    @State private var isCancelConfirmationPresented = false
 
     private let sessionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -24,28 +25,40 @@ struct FlightSessionView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: FFSpacing.lg) {
-                    RouteHeader(route: route)
+                    headerCard
 
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
+                        Text(isCompleted ? "Flight Complete" : "Time Left")
+                            .font(FFTypography.detail)
+                            .foregroundStyle(FFColors.textSecondary)
+
                         Text(format(seconds: snapshot.remainingSeconds))
                             .font(.system(size: 64, weight: .bold, design: .rounded))
                             .foregroundStyle(FFColors.textPrimary)
                             .monospacedDigit()
                             .accessibilityIdentifier("session.remainingTime")
 
-                        ProgressView(value: snapshot.progress)
-                            .tint(FFColors.accent)
-                            .scaleEffect(x: 1, y: 2.5, anchor: .center)
+                        flightProgressBar(progress: snapshot.progress)
 
-                        HStack(spacing: FFSpacing.md) {
-                            MetricPill(label: "Done", value: "\(Int(snapshot.progress * 100))%")
-                            MetricPill(label: "Flown", value: "\(snapshot.distanceTraveledKm) km")
-                            MetricPill(label: "Left", value: "\(snapshot.distanceRemainingKm) km")
+                        HStack {
+                            airportLabel(code: route.originCode, city: route.originCity, alignment: .leading)
+                            Spacer()
+                            airportLabel(code: route.destinationCode, city: route.destinationCity, alignment: .trailing)
                         }
                     }
                     .padding(FFSpacing.lg)
                     .background(FFColors.panel)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .stroke(FFColors.stroke, lineWidth: 1)
+                    }
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+
+                    HStack(spacing: FFSpacing.md) {
+                        MetricPill(label: "Done", value: "\(Int(snapshot.progress * 100))%")
+                        MetricPill(label: "Flown", value: "\(snapshot.distanceTraveledKm) km")
+                        MetricPill(label: "Left", value: "\(snapshot.distanceRemainingKm) km")
+                    }
 
                     VStack(alignment: .leading, spacing: FFSpacing.md) {
                         HStack {
@@ -61,7 +74,7 @@ struct FlightSessionView: View {
 
                             Spacer()
 
-                            Button(audioPlayerService.isPlaybackEnabled ? "Pause Sound" : "Play Sound") {
+                            Button(audioPlayerService.isPlaybackEnabled ? "Mute" : "Play") {
                                 toggleAudio()
                             }
                             .buttonStyle(.bordered)
@@ -87,36 +100,47 @@ struct FlightSessionView: View {
                         }
 
                         if isPaused {
-                            Text("Sound resumes with the timer.")
+                            Text("Sound resumes when you continue.")
                                 .font(FFTypography.detail)
                                 .foregroundStyle(FFColors.textSecondary)
                         } else if let error = audioPlayerService.lastErrorDescription {
                             Text(error)
                                 .font(FFTypography.detail)
-                                .foregroundStyle(.red.opacity(0.85))
+                                .foregroundStyle(FFColors.textSecondary)
                         }
                     }
                     .padding(FFSpacing.lg)
                     .background(FFColors.panel)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .stroke(FFColors.stroke, lineWidth: 1)
+                    }
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
-                    HStack(spacing: FFSpacing.md) {
-                        if !isTerminal {
-                            Button(isPaused ? "Resume" : "Pause") {
-                                togglePause()
+                    VStack(spacing: FFSpacing.md) {
+                        if isCompleted {
+                            PrimaryButton(title: "Done", systemImage: "checkmark.circle.fill") {
+                                handleDone()
                             }
-                            .buttonStyle(.borderedProminent)
-                            .tint(FFColors.panelRaised)
-                            .foregroundStyle(FFColors.textPrimary)
-                            .accessibilityIdentifier("session.pauseResume")
-                        }
+                            .accessibilityIdentifier("session.complete")
+                        } else {
+                            HStack(spacing: FFSpacing.md) {
+                                Button(isPaused ? "Resume" : "Pause") {
+                                    togglePause()
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(FFColors.panelRaised)
+                                .foregroundStyle(FFColors.textPrimary)
+                                .accessibilityIdentifier("session.pauseResume")
 
-                        Button(isCompleted ? "Done" : "End") {
-                            handleClose()
+                                Button("Cancel") {
+                                    isCancelConfirmationPresented = true
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(FFColors.accentSoft)
+                                .accessibilityIdentifier("session.cancel")
+                            }
                         }
-                        .buttonStyle(.bordered)
-                        .tint(FFColors.accentSoft)
-                        .accessibilityIdentifier("session.end")
                     }
                 }
             }
@@ -125,13 +149,18 @@ struct FlightSessionView: View {
             .background(FFColors.background.ignoresSafeArea())
             .navigationTitle("In Flight")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
-                        handleClose()
-                    }
-                }
+        }
+        .confirmationDialog(
+            "Cancel this flight?",
+            isPresented: $isCancelConfirmationPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel Flight", role: .destructive) {
+                cancelFlight()
             }
+            Button("Keep Going", role: .cancel) {}
+        } message: {
+            Text("Your progress for this flight will be lost.")
         }
         .onAppear {
             guard !hasLoaded else { return }
@@ -143,6 +172,93 @@ struct FlightSessionView: View {
         .onReceive(sessionTimer) { value in
             guard session.status == .active else { return }
             refresh(at: value)
+        }
+    }
+
+    private var headerCard: some View {
+        VStack(alignment: .leading, spacing: FFSpacing.md) {
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: FFSpacing.xs) {
+                    Text(route.themeName)
+                        .font(FFTypography.detail)
+                        .foregroundStyle(FFColors.accentSoft)
+                    RouteHeader(route: route)
+                }
+
+                Spacer()
+
+                Text(statusTitle)
+                    .font(FFTypography.detail)
+                    .foregroundStyle(FFColors.textPrimary)
+                    .padding(.horizontal, FFSpacing.sm)
+                    .padding(.vertical, 8)
+                    .background(FFColors.panelRaised)
+                    .clipShape(Capsule())
+            }
+
+            HStack(spacing: FFSpacing.md) {
+                MetricPill(label: "Focus", value: "\(session.plannedMinutes)m")
+                MetricPill(label: "Sound", value: selectedTrack.title)
+            }
+        }
+        .padding(FFSpacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(FFColors.heroGradient)
+        .overlay {
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .stroke(FFColors.stroke, lineWidth: 1)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
+    private func flightProgressBar(progress: Double) -> some View {
+        GeometryReader { geometry in
+            let clampedProgress = min(max(progress, 0), 1)
+            let trackWidth = geometry.size.width
+            let fillWidth = max(30, trackWidth * clampedProgress)
+
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(FFColors.panelRaised)
+
+                Capsule()
+                    .fill(FFColors.accent.opacity(0.95))
+                    .frame(width: fillWidth)
+
+                Image(systemName: "airplane")
+                    .font(.headline)
+                    .foregroundStyle(Color.black.opacity(0.7))
+                    .frame(width: 28, height: 28)
+                    .background(FFColors.accentSoft)
+                    .clipShape(Circle())
+                    .offset(x: min(max(fillWidth - 20, 0), max(trackWidth - 28, 0)))
+            }
+        }
+        .frame(height: 28)
+        .accessibilityIdentifier("session.progress")
+    }
+
+    private func airportLabel(code: String, city: String, alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 4) {
+            Text(code)
+                .font(FFTypography.code)
+                .foregroundStyle(FFColors.textPrimary)
+            Text(city)
+                .font(FFTypography.detail)
+                .foregroundStyle(FFColors.textSecondary)
+        }
+    }
+
+    private var statusTitle: String {
+        switch session.status {
+        case .active:
+            return "In Flight"
+        case .paused:
+            return "Paused"
+        case .completed:
+            return "Arrived"
+        case .cancelled:
+            return "Closed"
         }
     }
 
@@ -206,19 +322,16 @@ struct FlightSessionView: View {
         }
     }
 
-    private func handleClose() {
-        if isCompleted {
-            onClose()
-            return
-        }
-
-        if currentSnapshot.isComplete {
+    private func handleDone() {
+        if !isCompleted, currentSnapshot.isComplete {
             _ = sessionEngine.complete(session, at: now, routeDistanceKm: route.distanceKm)
             finalizeCompletion()
-            onClose()
-            return
         }
 
+        onClose()
+    }
+
+    private func cancelFlight() {
         _ = sessionEngine.cancel(session, at: .now, routeDistanceKm: route.distanceKm)
         notificationService.cancelNotification(for: session.id)
         audioPlayerService.synchronizePlayback(for: session)
