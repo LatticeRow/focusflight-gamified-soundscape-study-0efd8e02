@@ -19,10 +19,11 @@ struct PassportView: View {
     }
 
     var body: some View {
-        let totalMinutes = sessions.reduce(0) { $0 + $1.plannedMinutes }
-        let latestCompletion = sessions.compactMap(\.completedAt).max()
+        let completedSessions = sessions.filter { $0.status == .completed }
+        let totalMinutes = completedSessions.reduce(0) { $0 + $1.plannedMinutes }
+        let latestCompletion = completedSessions.compactMap(\.completedAt).max()
         let unlocked = achievementEngine.unlockedAchievements(
-            sessionCount: sessions.count,
+            sessionCount: completedSessions.count,
             totalMinutes: totalMinutes,
             latestCompletion: latestCompletion
         )
@@ -30,7 +31,7 @@ struct PassportView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: FFSpacing.lg) {
                 HStack(spacing: FFSpacing.md) {
-                    MetricPill(label: "Flights", value: "\(sessions.count)")
+                    MetricPill(label: "Flights", value: "\(completedSessions.count)")
                     MetricPill(label: "Minutes", value: "\(totalMinutes)")
                 }
 

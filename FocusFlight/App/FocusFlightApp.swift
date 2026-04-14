@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct FocusFlightApp: App {
+struct AurelineApp: App {
     @State private var appEnvironment = AppEnvironment()
     private let modelContainer = SwiftDataContainer.makeDefaultContainer(
         inMemory: ProcessInfo.processInfo.arguments.contains("-uiTesting")

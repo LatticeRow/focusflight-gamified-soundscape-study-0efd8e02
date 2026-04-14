@@ -1,5 +1,5 @@
 import XCTest
-@testable import FocusFlight
+@testable import Aureline
 
 final class SessionEngineTests: XCTestCase {
     func testExpectedEndDateUsesPlannedMinutes() {

@@ -13,18 +13,18 @@ struct SettingsView: View {
                             .foregroundStyle(FFColors.textSecondary)
 
                         Picker("Default duration", selection: $preferences.defaultDurationMinutes) {
-                            Text("25m").tag(25)
-                            Text("50m").tag(50)
-                            Text("90m").tag(90)
+                            ForEach(UserPreferences.durationPresets, id: \.self) { preset in
+                                Text("\(preset)m").tag(preset)
+                            }
                         }
                         .pickerStyle(.segmented)
                         .accessibilityIdentifier("settings.durationPicker")
 
-                        Text("Cabin sound")
+                        Text("Sound")
                             .font(FFTypography.detail)
                             .foregroundStyle(FFColors.textSecondary)
 
-                        Picker("Cabin sound", selection: $preferences.defaultAudioTrackID) {
+                        Picker("Sound", selection: $preferences.defaultAudioTrackID) {
                             ForEach(UserPreferences.AudioTrack.allCases) { track in
                                 Text(track.title).tag(track.id)
                             }
@@ -49,7 +49,7 @@ struct SettingsView: View {
                 }
 
                 settingsCard(title: "About") {
-                    Text("FocusFlight brings a calm cabin atmosphere to each focus block.")
+                    Text("\(AppBrand.name) keeps each session calm and contained.")
                         .font(FFTypography.body)
                         .foregroundStyle(FFColors.textSecondary)
                 }

@@ -1,11 +1,16 @@
 import Foundation
 import Combine
 
+enum AppBrand {
+    static let name = "Aureline"
+}
+
 @MainActor
 final class AppEnvironment {
     let router: AppRouter
     let preferences: UserPreferences
     let routeRepository: RouteRepository
+    let sessionRepository: SessionRepository
     let sessionEngine: SessionEngine
     let achievementEngine: AchievementEngine
     let audioPlayerService: AudioPlayerService
@@ -16,6 +21,7 @@ final class AppEnvironment {
         let preferences = UserPreferences()
         self.preferences = preferences
         self.routeRepository = RouteRepository()
+        self.sessionRepository = SessionRepository()
         self.sessionEngine = SessionEngine()
         self.achievementEngine = AchievementEngine()
         self.audioPlayerService = AudioPlayerService()
@@ -37,6 +43,7 @@ final class AppRouter: ObservableObject {
         let id = UUID()
         let route: FlightRoute
         let plannedMinutes: Int
+        let selectedAudioTrackID: String
     }
 
     @Published var selectedTab: Tab = .home

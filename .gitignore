@@ -4,14 +4,19 @@ build/
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
+*.moved-aside
+*.xcresult
 
 # User data
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
-*.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+*.swiftpm/
 
-# Swift
+# SwiftPM
 .build/
 
 # macOS
 .DS_Store
+
+# Local tooling
+.agentsight-codex-last.txt

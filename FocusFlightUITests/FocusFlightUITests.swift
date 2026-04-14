@@ -1,6 +1,6 @@
 import XCTest
 
-final class FocusFlightUITests: XCTestCase {
+final class AurelineUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
     }
@@ -27,7 +27,7 @@ final class FocusFlightUITests: XCTestCase {
 
         app.tabBars.buttons["Settings"].tap()
         app.buttons["90m"].tap()
-        app.buttons["Night"].tap()
+        app.buttons["Midnight"].tap()
         app.switches["settings.notifications"].tap()
         app.switches["settings.haptics"].tap()
     }

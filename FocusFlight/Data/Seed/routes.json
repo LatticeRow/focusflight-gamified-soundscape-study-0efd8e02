@@ -86,5 +86,27 @@
     "estimatedMinutes": 25,
     "themeName": "Bluegrass Glide",
     "audioTrackID": "steady"
+  },
+  {
+    "id": "atl-dfw",
+    "originCity": "Atlanta",
+    "originCode": "ATL",
+    "destinationCity": "Dallas",
+    "destinationCode": "DFW",
+    "distanceKm": 1178,
+    "estimatedMinutes": 25,
+    "themeName": "Club Cabin",
+    "audioTrackID": "steady"
+  },
+  {
+    "id": "msp-dca",
+    "originCity": "Minneapolis",
+    "originCode": "MSP",
+    "destinationCity": "Washington",
+    "destinationCode": "DCA",
+    "distanceKm": 1498,
+    "estimatedMinutes": 50,
+    "themeName": "Capital Descent",
+    "audioTrackID": "night"
   }
 ]

@@ -53,14 +53,14 @@
 			containerPortal = FF0000000000000000003004 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FF0000000000000000003001;
-			remoteInfo = FocusFlight;
+			remoteInfo = Aureline;
 		};
 		FF0000000000000000001002 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FF0000000000000000003004 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FF0000000000000000003001;
-			remoteInfo = FocusFlight;
+			remoteInfo = Aureline;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -103,10 +103,10 @@
 		FF0000000000000000000B01 /* SessionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEngineTests.swift; sourceTree = "<group>"; };
 		FF0000000000000000000B02 /* AchievementEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementEngineTests.swift; sourceTree = "<group>"; };
 		FF0000000000000000000B03 /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
-		FF0000000000000000000B04 /* FocusFlightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusFlightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000B04 /* AurelineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AurelineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF0000000000000000000C01 /* FocusFlightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFlightUITests.swift; sourceTree = "<group>"; };
-		FF0000000000000000000C02 /* FocusFlightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusFlightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF0000000000000000000D01 /* FocusFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000C02 /* AurelineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AurelineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000D01 /* Aureline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aureline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,9 +186,9 @@
 		FF0000000000000000002106 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FF0000000000000000000D01 /* FocusFlight.app */,
-				FF0000000000000000000B04 /* FocusFlightTests.xctest */,
-				FF0000000000000000000C02 /* FocusFlightUITests.xctest */,
+				FF0000000000000000000D01 /* Aureline.app */,
+				FF0000000000000000000B04 /* AurelineTests.xctest */,
+				FF0000000000000000000C02 /* AurelineUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -369,9 +369,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FF0000000000000000003001 /* FocusFlight */ = {
+		FF0000000000000000003001 /* Aureline */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "FocusFlight" */;
+			buildConfigurationList = FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "Aureline" */;
 			buildPhases = (
 				FF0000000000000000002004 /* Sources */,
 				FF0000000000000000002001 /* Frameworks */,
@@ -381,14 +381,14 @@
 			);
 			dependencies = (
 			);
-			name = FocusFlight;
-			productName = FocusFlight;
-			productReference = FF0000000000000000000D01 /* FocusFlight.app */;
+			name = Aureline;
+			productName = Aureline;
+			productReference = FF0000000000000000000D01 /* Aureline.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FF0000000000000000003002 /* FocusFlightTests */ = {
+		FF0000000000000000003002 /* AurelineTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "FocusFlightTests" */;
+			buildConfigurationList = FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "AurelineTests" */;
 			buildPhases = (
 				FF0000000000000000002006 /* Sources */,
 				FF0000000000000000002002 /* Frameworks */,
@@ -399,14 +399,14 @@
 			dependencies = (
 				FF0000000000000000006001 /* PBXTargetDependency */,
 			);
-			name = FocusFlightTests;
-			productName = FocusFlightTests;
-			productReference = FF0000000000000000000B04 /* FocusFlightTests.xctest */;
+			name = AurelineTests;
+			productName = AurelineTests;
+			productReference = FF0000000000000000000B04 /* AurelineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		FF0000000000000000003003 /* FocusFlightUITests */ = {
+		FF0000000000000000003003 /* AurelineUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "FocusFlightUITests" */;
+			buildConfigurationList = FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "AurelineUITests" */;
 			buildPhases = (
 				FF0000000000000000002008 /* Sources */,
 				FF0000000000000000002003 /* Frameworks */,
@@ -417,9 +417,9 @@
 			dependencies = (
 				FF0000000000000000006002 /* PBXTargetDependency */,
 			);
-			name = FocusFlightUITests;
-			productName = FocusFlightUITests;
-			productReference = FF0000000000000000000C02 /* FocusFlightUITests.xctest */;
+			name = AurelineUITests;
+			productName = AurelineUITests;
+			productReference = FF0000000000000000000C02 /* AurelineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -445,7 +445,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FF0000000000000000005001 /* Build configuration list for PBXProject "FocusFlight" */;
+			buildConfigurationList = FF0000000000000000005001 /* Build configuration list for PBXProject "Aureline" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -458,9 +458,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FF0000000000000000003001 /* FocusFlight */,
-				FF0000000000000000003002 /* FocusFlightTests */,
-				FF0000000000000000003003 /* FocusFlightUITests */,
+				FF0000000000000000003001 /* Aureline */,
+				FF0000000000000000003002 /* AurelineTests */,
+				FF0000000000000000003003 /* AurelineUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -554,12 +554,12 @@
 /* Begin PBXTargetDependency section */
 		FF0000000000000000006001 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FF0000000000000000003001 /* FocusFlight */;
+			target = FF0000000000000000003001 /* Aureline */;
 			targetProxy = FF0000000000000000001001 /* PBXContainerItemProxy */;
 		};
 		FF0000000000000000006002 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FF0000000000000000003001 /* FocusFlight */;
+			target = FF0000000000000000003001 /* Aureline */;
 			targetProxy = FF0000000000000000001002 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -682,7 +682,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -712,7 +712,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -736,15 +736,15 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusFlight.app/FocusFlight";
-				TEST_TARGET_NAME = FocusFlight;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aureline.app/Aureline";
+				TEST_TARGET_NAME = Aureline;
 			};
 			name = Debug;
 		};
@@ -762,14 +762,14 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusFlight.app/FocusFlight";
-				TEST_TARGET_NAME = FocusFlight;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aureline.app/Aureline";
+				TEST_TARGET_NAME = Aureline;
 			};
 			name = Release;
 		};
@@ -781,14 +781,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = FocusFlight;
+				TEST_TARGET_NAME = Aureline;
 			};
 			name = Debug;
 		};
@@ -800,20 +800,20 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.focusflight.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latticerow.aureline.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = FocusFlight;
+				TEST_TARGET_NAME = Aureline;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FF0000000000000000005001 /* Build configuration list for PBXProject "FocusFlight" */ = {
+		FF0000000000000000005001 /* Build configuration list for PBXProject "Aureline" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FF0000000000000000004001 /* Debug */,
@@ -822,7 +822,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "FocusFlight" */ = {
+		FF0000000000000000005002 /* Build configuration list for PBXNativeTarget "Aureline" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FF0000000000000000004101 /* Debug */,
@@ -831,7 +831,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "FocusFlightTests" */ = {
+		FF0000000000000000005003 /* Build configuration list for PBXNativeTarget "AurelineTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FF0000000000000000004201 /* Debug */,
@@ -840,7 +840,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "FocusFlightUITests" */ = {
+		FF0000000000000000005004 /* Build configuration list for PBXNativeTarget "AurelineUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FF0000000000000000004301 /* Debug */,

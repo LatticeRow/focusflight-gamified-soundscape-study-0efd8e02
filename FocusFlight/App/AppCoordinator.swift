@@ -24,13 +24,15 @@ struct AppCoordinator: View {
             NavigationStack {
                 HomeView(
                     route: selectedRoute,
-                    durationMinutes: preferences.defaultDurationMinutes,
-                    onDurationChange: { preferences.defaultDurationMinutes = $0 },
+                    durationMinutes: $preferences.defaultDurationMinutes,
+                    audioTrackTitle: appEnvironment.routeRepository.audioTrack(id: preferences.defaultAudioTrackID)?.title
+                        ?? preferences.defaultAudioTrack.title,
                     onChangeRoute: { router.isRoutePickerPresented = true },
                     onStartFlight: {
                         router.activeSession = .init(
                             route: selectedRoute,
-                            plannedMinutes: preferences.defaultDurationMinutes
+                            plannedMinutes: preferences.defaultDurationMinutes,
+                            selectedAudioTrackID: preferences.defaultAudioTrack.id
                         )
                     }
                 )
@@ -76,6 +78,7 @@ struct AppCoordinator: View {
                 sessionDraft: draft,
                 preferences: preferences,
                 sessionEngine: appEnvironment.sessionEngine,
+                sessionRepository: appEnvironment.sessionRepository,
                 audioPlayerService: appEnvironment.audioPlayerService,
                 notificationService: appEnvironment.notificationService
             ) {

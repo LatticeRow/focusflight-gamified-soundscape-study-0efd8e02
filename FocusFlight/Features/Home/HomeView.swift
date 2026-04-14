@@ -5,21 +5,21 @@ struct HomeView: View {
     @Query(sort: \PassportStamp.awardedAt, order: .reverse) private var stamps: [PassportStamp]
 
     let route: FlightRoute
-    let durationMinutes: Int
-    let onDurationChange: (Int) -> Void
+    @Binding var durationMinutes: Int
+    let audioTrackTitle: String
     let onChangeRoute: () -> Void
     let onStartFlight: () -> Void
 
     init(
         route: FlightRoute,
-        durationMinutes: Int,
-        onDurationChange: @escaping (Int) -> Void,
+        durationMinutes: Binding<Int>,
+        audioTrackTitle: String,
         onChangeRoute: @escaping () -> Void,
         onStartFlight: @escaping () -> Void
     ) {
         self.route = route
-        self.durationMinutes = durationMinutes
-        self.onDurationChange = onDurationChange
+        self._durationMinutes = durationMinutes
+        self.audioTrackTitle = audioTrackTitle
         self.onChangeRoute = onChangeRoute
         self.onStartFlight = onStartFlight
     }
@@ -35,10 +35,10 @@ struct HomeView: View {
                         .font(FFTypography.sectionTitle)
                         .foregroundStyle(FFColors.textPrimary)
 
-                    Picker("Duration", selection: Binding(get: { durationMinutes }, set: onDurationChange)) {
-                        Text("25m").tag(25)
-                        Text("50m").tag(50)
-                        Text("90m").tag(90)
+                    Picker("Duration", selection: $durationMinutes) {
+                        ForEach(UserPreferences.durationPresets, id: \.self) { preset in
+                            Text("\(preset)m").tag(preset)
+                        }
                     }
                     .pickerStyle(.segmented)
                     .accessibilityIdentifier("home.durationPicker")
@@ -60,23 +60,24 @@ struct HomeView: View {
             .padding(.vertical, FFSpacing.lg)
         }
         .background(FFColors.background.ignoresSafeArea())
-        .navigationTitle("FocusFlight")
+        .navigationTitle(AppBrand.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: FFSpacing.md) {
-            Text("Board a focus flight.")
+            Text("Settle in and focus.")
                 .font(FFTypography.heroTitle)
                 .foregroundStyle(FFColors.textPrimary)
 
-            Text("Choose a route, set your block, and settle into the cabin.")
+            Text("Pick a route and let the cabin carry the session.")
                 .font(FFTypography.body)
                 .foregroundStyle(FFColors.textSecondary)
 
             HStack(spacing: FFSpacing.sm) {
                 MetricPill(label: "Route", value: route.codePair)
                 MetricPill(label: "Preset", value: "\(durationMinutes)m")
+                MetricPill(label: "Sound", value: audioTrackTitle)
             }
         }
         .padding(FFSpacing.lg)

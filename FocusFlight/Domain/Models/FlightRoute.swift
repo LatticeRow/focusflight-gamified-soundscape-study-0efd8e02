@@ -19,6 +19,10 @@ struct FlightRoute: Codable, Hashable, Identifiable {
         "\(originCode)  •  \(destinationCode)"
     }
 
+    var recommendedTrack: UserPreferences.AudioTrack {
+        UserPreferences.AudioTrack(rawValue: audioTrackID) ?? .fallback
+    }
+
     static let placeholder = FlightRoute(
         id: "sfo-jfk",
         originCity: "San Francisco",

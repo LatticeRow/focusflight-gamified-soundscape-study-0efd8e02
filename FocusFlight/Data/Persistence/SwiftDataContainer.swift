@@ -10,7 +10,7 @@ enum SwiftDataContainer {
         ])
 
         let configuration = ModelConfiguration(
-            "FocusFlight",
+            "AurelineStore",
             isStoredInMemoryOnly: inMemory
         )
 
